@@ -31,15 +31,29 @@ $tonbi -d <source> -p <platform> -head -tail
 
 ## Customization
 ```
-cat > db/example.json
-kb {
-    name : "example"
-    xss { 
-        key : "xxx" 
-        description : "xxxxx"
-        reference : "http://" 
-    }
+mkdir plugin/exmaple 
+cat > plugin/example/kbdb.json
+{
+	plugin : "example"
+	version : "3"
+	items : 
+	[ 
+		{
+			vulnerability : "xss"  ,
+			keyword : ["appView(" ] , 
+			description : "appView function displays non-sanitized input data from user" , 
+			reference : "http://xxxxx.xxxx" 
+		},
+
+		{
+			vulnerability : "cmd" ,
+			keyword : ["excuteCmd((" ]
+			description : "excuteCmd function excute cli on server ", 
+			reference : "http://yyyyyy.yyyyy" 
+		}
+	]
 }
+
 
 $tonbi -d ./src -p example -head -tail 
 
