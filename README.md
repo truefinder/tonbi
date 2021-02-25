@@ -33,6 +33,6 @@ kb {
     }
 }
 
-#tonbi -d ./src -p example -head -tail 
+$tonbi -d ./src -p example -head -tail 
 
 ```
