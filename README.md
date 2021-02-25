@@ -13,6 +13,7 @@ git clone http://github.com/truefinder/tonbi.git
 ```
 $tonbi -d <source> -p <platform> -head -tail 
 
+-d  source directory
 -p  platform name     
 -h  display haed 3 line
 -t  display tail 3 line 
