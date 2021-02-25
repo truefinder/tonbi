@@ -32,7 +32,7 @@ $tonbi -d <source> -p <platform> -t <template> --head <num> --tail <num>
     - rails 
 
 
-## Adding your own platform KBDB
+## Adding your own foundings to KBDB
 ```
 mkdir platform/exmaple 
 cat > platform/example/kbdb.json
