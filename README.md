@@ -13,13 +13,20 @@ git clone http://github.com/truefinder/tonbi.git
 ```
 $tonbi -d <source> -p <platform> -head -tail 
 
--p  platform name 
-    laravel, symfony, cakephp, codeigniter, fuelphp, phalcon, silex, yii, athena, flask, django, kivy, bottle, rails     
-    
+-p  platform name     
 -h  display haed 3 line
 -t  display tail 3 line 
 
 ```
+
+## Supported platform 
+* PHP
+    - laravel, symfony, cakephp, codeigniter, fuelphp, phalcon, silex, yii, ethena
+* Python
+    - flask, django, kivy, bottle
+* Ruby
+    - rails 
+
 
 ## Customization
 ```
