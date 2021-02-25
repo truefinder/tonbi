@@ -1,7 +1,14 @@
 from optparse import OptionParser
 import os
+import json 
+
 
 DEFAULT_LINES = 3 
+DEBUG = 0 
+
+def debug_print(str):
+	if DEBUG : 
+		print(str) 
 
 class Config :
 	source_directory = ""
@@ -9,22 +16,33 @@ class Config :
 	template_name = "" 
 	head_count = 3 
 	head_count = 3 
-		
-class Vitem : 
-	def __init__ (self):
-		pass
 
-class Vkbdb :
-	def __init__ (self):
-		pass
+class Kbdb :
+	dic = "" 
 
 config = Config() 
+kbdb = Kbdb() 
 
 def check_config():
 	print("check configuration") 
 
 def load_platform() :
 	print ("load platform ..." )
+	filename = "./platform/" + config.platform_name + "/kbdb.json" 
+	with open( filename ) as f : 
+		kbdb.dic = json.load(f) 
+		debug_print(kbdb.dic) 
+
+def show_vulnerability(filename, line, item):
+	print( "================================================") 
+	print(" vulnerability : " + item["vulnerability"] ) 
+	print(" description : " + item["description"] ) 
+	print(" reference : " + item["reference"] ) 
+	print(" filename : " + filename ) 
+	print( "================================================") 
+	print( line ) 
+
+
 
 def load_plugin() : 
 	print ("load plugin ..." )
@@ -33,12 +51,27 @@ def start_audit() :
 	print("start audit ...") 
 	search( config.source_directory) 
 
+def audit( filename) :
+	print("audit file with kbdb") 
+	with open( filename ) as f :
+		datafile = f.readlines()
+		for line in datafile :
+			for item in kbdb.dic["items"] : 
+				debug_print(item["keyword"])
+				if any(x in line for x in item["keyword"]):
+					debug_print("found!" )
+					#print(item)
+					show_vulnerability(filename, line, item) 
+					return True 
+
 def search(dirname):
 	for (path, dir, files) in os.walk(dirname):
 		for filename in files:
 			full_filename = path + "/" + filename 
-			print(full_filename) 
+			debug_print(full_filename) 
+			audit(full_filename)
 
+	
 def main():
 	usage = "usage: %prog [options] arg"
 	parser = OptionParser(usage)
