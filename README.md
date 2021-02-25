@@ -19,3 +19,18 @@ $tonbi -d <source> -p <platform> -head -tail
 
 ```
 
+## Customization
+```
+cat > db/example.json
+kb {
+    name : "example"
+    xss { 
+        key : "xxx" 
+        description : "xxxxx"
+        reference : "http://" 
+    }
+}
+
+#tonbi -d ./src -p example -head -tail 
+
+```
