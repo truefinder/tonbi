@@ -31,8 +31,8 @@ $tonbi -d <source> -p <platform> -head -tail
 
 ## Customization
 ```
-mkdir plugin/exmaple 
-cat > plugin/example/kbdb.json
+mkdir platform/exmaple 
+cat > platform/example/kbdb.json
 {
 	plugin : "example"
 	version : "3"
