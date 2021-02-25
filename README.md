@@ -1,5 +1,7 @@
 # TONBI
-TONBI is web source auditing tool for security researcher, It supports various sever-side platform such as Laravel, Symphony, CakePHP, ... 
+TONBI is web source code auditing tool for security researchers, It supports various web applications based on sever-side platform such as Laravel, Symfony, CakePHP, ... 
+
+_Waring : TONBI is not an all-automated tool, but give you an efficient method for full manual source code auditing for your web systems_ 
 
 ## Install 
 Download tonbi 
