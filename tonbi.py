@@ -5,10 +5,12 @@ import json
 
 DEFAULT_LINES = 3 
 DEBUG = 0 
+EXCLUDE_EXTS = [ "jpg", "png", "jpeg", "ico", "gif", "tif" , "tiff", "bmp" ] 
+
 
 def debug_print(str):
 	if DEBUG : 
-		print(str) 
+		print( str) 
 
 class Config :
 	source_directory = ""
@@ -16,6 +18,7 @@ class Config :
 	template_name = "" 
 	head_count = 3 
 	head_count = 3 
+	output = ""
 
 class Kbdb :
 	dic = "" 
@@ -29,19 +32,26 @@ def check_config():
 def load_platform() :
 	print ("load platform ..." )
 	filename = "./platform/" + config.platform_name + "/kbdb.json" 
-	with open( filename ) as f : 
+	with open( filename  ) as f : 
 		kbdb.dic = json.load(f) 
 		debug_print(kbdb.dic) 
 
 def show_vulnerability(filename, line, item):
-	print( "================================================") 
-	print(" vulnerability : " + item["vulnerability"] ) 
-	print(" description : " + item["description"] ) 
-	print(" reference : " + item["reference"] ) 
-	print(" filename : " + filename ) 
-	print( "================================================") 
-	print( line ) 
+	vulnerability = ""
+	vulnerability += "================================================\n" 
+	vulnerability += " vulnerability : " + item["vulnerability"] + "\n"  
+	vulnerability += " description : " + item["description"]  + "\n" 
+	vulnerability += " reference : " + item["reference"]  + "\n" 
+	vulnerability += " filename : " + filename  + "\n" 
+	vulnerability += "================================================" + "\n" 
+	vulnerability += line + "\n" 
 
+	if ( config.output) : 
+		with open(config.output, "a") as f : 
+			f.write( vulnerability) 
+			f.close()
+	else:
+		print(vulnerability) 
 
 
 def load_plugin() : 
@@ -51,16 +61,33 @@ def start_audit() :
 	print("start audit ...") 
 	search( config.source_directory) 
 
+def sequence_find( line, keyword_array):
+	n = 0
+	found_count =0 
+	keyword_count = len(keyword_array) 
+	debug_print("search word = " + str(keyword_count) ) 
+	for key in keyword_array : 
+		n = line.find( key, n ) 
+		if ( n == -1 ): # not found 
+			return False 
+		else : #found 
+			found_count = found_count+1
+
+	if ( keyword_count == found_count ):
+			return True 
+	else:
+		return False 
+	
+
 def audit( filename) :
-	print("audit file with kbdb") 
-	with open( filename ) as f :
+	print("audit file with kbdb : " + filename ) 
+	with open( filename, errors='replace' ) as f :
 		datafile = f.readlines()
 		for line in datafile :
 			for item in kbdb.dic["items"] : 
 				debug_print(item["keyword"])
-				if any(x in line for x in item["keyword"]):
-					debug_print("found!" )
-					#print(item)
+				#if any(x in line for x in item["keyword"]):
+				if(sequence_find(line, item["keyword"])):
 					show_vulnerability(filename, line, item) 
 					return True 
 
@@ -68,8 +95,12 @@ def search(dirname):
 	for (path, dir, files) in os.walk(dirname):
 		for filename in files:
 			full_filename = path + "/" + filename 
-			debug_print(full_filename) 
-			audit(full_filename)
+			(base, ext ) = os.path.splitext( full_filename ) 
+			if any(x in ext for x in EXCLUDE_EXTS):
+				continue 
+			else : # start audit 
+				debug_print(full_filename) 
+				audit(full_filename)
 
 	
 def main():
@@ -78,9 +109,10 @@ def main():
 
 	parser.add_option("-d", "--directory", dest="directory", metavar="DIR", help="web application source code directory")
 	parser.add_option("-p", "--platform", dest="platform", metavar="PLATFORM", help="platform name ex) laravel ")
-	parser.add_option("-t", "--template", dest="template", metavar="TEMPLATE", help="template name ex) twitty")
+	parser.add_option("-t", "--template", dest="template", metavar="TEMPLATE", help="template name ex) twig")
 	parser.add_option("--head",  type="int", dest="head", help="show previous <num> lines")
 	parser.add_option("--tail",  type="int", dest="tail", help="show below <num> lines")
+	parser.add_option("-o",  "--output", dest="output", metavar="OUTPUT", help="save result into file")
 
 	(options, args) = parser.parse_args()
 
@@ -96,8 +128,10 @@ def main():
 
 	if (options.template):
 		config.template_name = options.template 
-	else :
-		parser.error("app template name not defined")  
+
+	if (options.output):
+		config.output = options.output 
+
 
 	if (options.head):
 		config.head_count = options.head 

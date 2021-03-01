@@ -13,13 +13,14 @@ git clone http://github.com/truefinder/tonbi.git
 
 ## Usage 
 ```
-$tonbi -d <source> -p <platform> -t <template> --head <num> --tail <num>
+$tonbi -d <source> -p <platform> -t <template> --head <num> --tail <num> -o result.txt
 
 -d <source> top source code directory
 -p <paltform> server-side platform name     
 -t <template> view template name
 -head <n> display haed 3 line
 -tail <n> display tail 3 line 
+-o <output> save result into text file
 
 ```
 
@@ -58,6 +59,6 @@ cat > platform/example/kbdb.json
 }
 
 
-$tonbi -d ./src -p example --head 3 --tail 3
+$tonbi -d ./src -p example --head 3 --tail 3 -o result.txt
 
 ```
