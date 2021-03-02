@@ -2,7 +2,7 @@
 <img src="https://user-images.githubusercontent.com/4240789/109131685-5fbdb500-7796-11eb-82d1-93237d83430c.jpg" width=250> 
 
 ## What's TONBI?
-TONBI is framework based web application source code auditing tool for security researchers, It supports various web application framework such as Laravel, Symfony, CakePHP, Codeigniter, ... It is not an full-automated auditing tool, but gives you an efficient method for finding vulnerabilities of your framework based web applications 
+TONBI is a framework based web application source code auditing tool for security researchers. It supports various web application framework such as Laravel, Symfony, CakePHP, Codeigniter, ... It gives you an efficient auditing method for finding vulnerabilities of your web applications 
 
 ## Install 
 Download tonbi 
