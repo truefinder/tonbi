@@ -7,7 +7,6 @@ DEFAULT_LINES = 3
 DEBUG = 0 
 EXCLUDE_EXTS = [ "jpg", "png", "jpeg", "ico", "gif", "tif" , "tiff", "bmp" ] 
 
-
 def debug_print(str):
 	if DEBUG : 
 		print( str) 
@@ -16,8 +15,8 @@ class Config :
 	source_directory = ""
 	platform_name = ""
 	template_name = "" 
-	head_count = 3 
-	head_count = 3 
+	head_count = DEFAULT_LINES 
+	tail_count = DEFAULT_LINES 
 	output = ""
 
 class Kbdb :
@@ -25,6 +24,12 @@ class Kbdb :
 
 config = Config() 
 kbdb = Kbdb() 
+
+def prepare_output():
+	if(config.output):
+		if( os.path.exists( config.output)):
+			os.remove(config.output)
+
 
 def check_config():
 	print("check configuration") 
@@ -36,15 +41,15 @@ def load_platform() :
 		kbdb.dic = json.load(f) 
 		debug_print(kbdb.dic) 
 
-def show_vulnerability(filename, line, item):
+def show_vulnerability(filename, lines, item):
 	vulnerability = ""
-	vulnerability += "================================================\n" 
-	vulnerability += " vulnerability : " + item["vulnerability"] + "\n"  
-	vulnerability += " description : " + item["description"]  + "\n" 
-	vulnerability += " reference : " + item["reference"]  + "\n" 
-	vulnerability += " filename : " + filename  + "\n" 
-	vulnerability += "================================================" + "\n" 
-	vulnerability += line + "\n" 
+	vulnerability += "==================================================\n" 
+	vulnerability += "vulnerability : " + item["vulnerability"] + "\n"  
+	vulnerability += "description : " + item["description"]  + "\n" 
+	vulnerability += "reference : " + item["reference"]  + "\n" 
+	vulnerability += "filename : " + filename  + "\n" 
+	vulnerability += "=================================================\n" 
+	vulnerability += lines + "\n" 
 
 	if ( config.output) : 
 		with open(config.output, "a") as f : 
@@ -82,14 +87,29 @@ def sequence_find( line, keyword_array):
 def audit( filename) :
 	print("audit file with kbdb : " + filename ) 
 	with open( filename, errors='replace' ) as f :
+		i = 0
+		lines = ""
 		datafile = f.readlines()
 		for line in datafile :
 			for item in kbdb.dic["items"] : 
 				debug_print(item["keyword"])
 				#if any(x in line for x in item["keyword"]):
 				if(sequence_find(line, item["keyword"])):
-					show_vulnerability(filename, line, item) 
+					head_n = i-config.head_count
+					tail_n = i+config.tail_count+1
+
+					if ( head_n > 0 and tail_n < len(datafile) ):
+						j = head_n 
+						for x in datafile[head_n:tail_n] : 
+							lines += str(j) + ": " + x
+							j =j +1 
+					else : 
+						lines += str(i) + ": " + line 
+
+					
+					show_vulnerability(filename, lines, item) 
 					return True 
+			i = i+1 
 
 def search(dirname):
 	for (path, dir, files) in os.walk(dirname):
@@ -144,6 +164,8 @@ def main():
 	load_platform() 
 
 	load_plugin() 
+
+	prepare_output()
 
 	start_audit() 
 
