@@ -108,6 +108,7 @@ def audit( filename) :
 
 					
 					show_vulnerability(filename, lines, item) 
+					lines = ""
 			i = i+1 
 
 def search(dirname):
