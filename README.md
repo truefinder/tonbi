@@ -10,18 +10,22 @@ Download tonbi
 git clone http://github.com/truefinder/tonbi.git 
 ```
 
-## Usage 
+## Basic Usage 
 ```
-$tonbi -d <source> -p <platform> -t <template> --head <num> --tail <num> -o result.txt
+$tonbi -d ./source_dir -p your_platform --head 3 --tail 3 -o output.txt
+```
 
+## Options 
+```
 -d <source> top source code directory
 -p <paltform> server-side platform name     
 -t <template> view template name
 -head <n> display haed n line
 -tail <n> display tail n line 
 -o <output> save result into text file
+-D verbose output
+-c use config file
 
-$tonbi -d ./src -p your_platform --head 3 --tail 3 -o output.txt
 ```
 
 ## Usage with config.json
@@ -35,7 +39,8 @@ create config.json like below
 	"tail_count" : 5,
 	"template_name" : "",
 	"output" : "output.txt",
-	"plugins" : [ "" ]
+	"plugins" : [ "" ],
+	"ignore_files" :  [ "jpg", "png", "jpeg", "ico", "gif", "tif" , "tiff", "bmp" ] 
 }
 
 $tonbi -c config.json 
@@ -52,30 +57,32 @@ $tonbi -c config.json
 
 ## Add your own foundings to KBDB
 ```
-mkdir platform/exmaple 
-cat > platform/example/kbdb.json
+mkdir platform/your_platform 
+cat > platform/your_platform/kbdb.json
 {
-	platform : "example"
+	platform : "your_platform"
 	version : "3"
 	items : 
 	[ 
 		{
 			vulnerability : "xss"  ,
-			keyword : ["appView(" ] , 
+			keyword : "appView\\\\("  , 
 			description : "appView function displays non-sanitized input data from user" , 
-			reference : "http://xxxxx.xxxx" 
+			reference : "http://" 
 		},
 
 		{
 			vulnerability : "cmd" ,
-			keyword : ["excuteCmd((" ]
+			keyword : "excuteCmd\\\\(" 
 			description : "excuteCmd function excute cli on server ", 
-			reference : "http://yyyyyy.yyyyy" 
+			reference : "http://" 
 		}
 	]
 }
-
 ```
+Keyword is based on regex, if your regular expression keyword "appView\(", 
+please kindly add it after json escape json.dumps("appView\(") 
+returns "appView\\\\("
 
 ## Participate with your own plugin 
 ```
