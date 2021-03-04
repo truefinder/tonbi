@@ -5,6 +5,7 @@
 	"tail_count" : 5,
 	"template_name" : "",
 	"output" : "output.txt",
-	"plugins" : [ "" ]
+	"plugins" : [ "" ],
+	"ignore_files" :  [ "jpg", "png", "jpeg", "ico", "gif", "tif" , "tiff", "bmp" ] 
 }
 

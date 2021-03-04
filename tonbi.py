@@ -1,10 +1,11 @@
 from optparse import OptionParser
 import os
 import json 
+import re
 
 
 DEFAULT_LINES = 3 
-EXCLUDE_EXTS = [ "jpg", "png", "jpeg", "ico", "gif", "tif" , "tiff", "bmp" ] 
+#EXCLUDE_EXTS = [ "jpg", "png", "jpeg", "ico", "gif", "tif" , "tiff", "bmp" ] 
 KBDB_FILE = "kbdb.json"
 
 def debug_print(str):
@@ -21,6 +22,7 @@ class Config :
 	tail_count = DEFAULT_LINES 
 	output = ""
 	plugins = []
+	ignore_files = [] 
 
 
 class Kbdb :
@@ -48,11 +50,17 @@ def load_config():
 		config.platform_name = config_dic["platform_name"] 
 		config.head_count = config_dic["head_count"] 
 		config.tail_count = config_dic["tail_count"] 
+		config.ignore_files = config_dic["ignore_files"]
 
-		if(config.template_name) :
+		if(config_dic["template_name"]) :
 			config.template_name = config_dic["template_name"] 
-		if(config.output):
-			config.oupput = (config_dic["output"] )
+
+		if(config_dic["output"]):
+			config.output = (config_dic["output"] )
+
+	debug_print("config_dic")
+	
+
         
 def load_platform() :
 	print ("load platform ..." )
@@ -114,7 +122,12 @@ def audit( filename) :
 			for item in kbdb.dic["items"] : 
 				debug_print(item["keyword"])
 				#if any(x in line for x in item["keyword"]):
-				if(sequence_find(line, item["keyword"])):
+				#if(sequence_find(line, item["keyword"])):
+				key = item["keyword"]
+				key = key.replace('\\\\','\\')
+				debug_print(key)
+				match = re.search(key, line)
+				if match:
 					head_n = i-config.head_count
 					tail_n = i+config.tail_count+1
 
@@ -136,7 +149,8 @@ def search(dirname):
 		for filename in files:
 			full_filename = path + "/" + filename 
 			(base, ext ) = os.path.splitext( full_filename ) 
-			if any(x in ext for x in EXCLUDE_EXTS):
+			exclude_exts = config.ignore_files 
+			if any(x in ext for x in exclude_exts):
 				continue 
 			else : # start audit 
 				debug_print(full_filename) 
@@ -153,13 +167,13 @@ def main():
 	parser.add_option("-t", "--template", dest="template", metavar="TEMPLATE", help="template name ex) twig")
 	parser.add_option("--head",  type="int", dest="head", help="show previous <num> lines")
 	parser.add_option("--tail",  type="int", dest="tail", help="show below <num> lines")
-	parser.add_option("-D", "--debug", help="for debug mode", action="store_false")
+	parser.add_option("-D", "--debug", dest="debug", help="verbose mode", action="store_true")
 	parser.add_option("-o",  "--output", dest="output", metavar="OUTPUT", help="save result into file")
 
 	(options, args) = parser.parse_args()
 
 	if( options.debug ):
- 		config.debug_mode = 1
+ 		config.debug_mode = True 
 
 	if (options.config): 
 		config.config_file = options.config 

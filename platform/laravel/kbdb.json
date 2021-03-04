@@ -1,76 +1,76 @@
 {
-  "plugin" : "laravel",
+  "platform" : "laravel",
   "version" : "5",
   "items" : [
     {
       "vulnerability" : "xss",
-      "keyword" : [
-        "{!!",
-        "!!}"
-      ],
+      "keyword" : 
+        "{!!.*!!}"
+      ,
       "description" : "Blade template donesn't escape {!! ",
-      "reference" : "http://xxxxx.xxxx",
+      "reference" : "https://laravel.com/docs/8.x/blade#displaying-unescaped-data",
       "risk" : 5
     },
     {
       "vulnerability" : "cmd",
-      "keyword" : [
-        " exec("
-      ],
-      "description" : "exec may occur command execution vulnerability",
-      "reference" : "",
+      "keyword" : 
+        " Artisan::call\\\\(|Artisan::queue\\\\("
+      ,
+      "description" : "Artisan::call may occur command execution vulnerability",
+      "reference" : "https://laravel.com/docs/8.x/artisan#programmatically-executing-commands",
+      "risk" : 5
+    },
+    {
+      "vulnerability" : "cmd",
+      "keyword" : 
+         "\\\\$this->call\\\\(|\\\\$this->callSilently\\\\("
+      ,
+      "description" : "call() may occur command execution vulnerability",
+      "reference" : "https://laravel.com/docs/8.x/artisan#programmatically-executing-commands",
       "risk" : 5
     },
     {
       "vulnerability" : "upload",
-      "keyword" : [
-        "'filename' => "
-      ],
+      "keyword" : 
+        "\\'filename\\' =>"
+      ,
       "description" : "check if script file included in validate([])",
       "reference" : "",
       "risk" : 5
     },
     {
       "vulnerability" : "sql",
-      "keyword" : [
-        "fromRaw("
-      ],
-      "description" : "sql injection",
-      "reference" : "dangerous function",
-      "risk" : 5
-    },
-    {
-      "vulnerability" : "sql",
-      "keyword" : [
-        "unprepared("
-      ],
+      "keyword" : 
+        "unprepared\\\\("
+      ,
       "description" : "dangerous function",
-      "reference" : "",
+      "reference" : "https://laravel.com/api/5.8/Illuminate/Database/ConnectionInterface.html#method_unprepared",
       "risk" : 5
     },
     {
       "vulnerability" : "sql",
-      "keyword" : [
-        "update("
-      ],
+      "keyword" : 
+        "DB::(select|insert|delete|update|statement)\\\\("
+      ,
       "description" : "dangerous function",
-      "reference" : "",
+      "reference" : "https://laravel.com/docs/5.3/database#listening-for-query-events",
       "risk" : 5
     },
     {
       "vulnerability" : "sql",
-      "keyword" : [
-        "whereRaw("
-      ],
+      "keyword" : 
+        "fromRaw|whereRaw\\\\("
+      ,
       "description" : "direct sql summitting may occure sql injection ",
       "reference" : "https://laravel.com/docs/4.2/queries#raw-expressions",
       "risk" : 5
     },
+
     {
       "vulnerability" : "sql",
-      "keyword" : [
-        "DB::raw("
-      ],
+      "keyword" : 
+        "DB::raw\\\\("
+      ,
       "description" : "direct sql summitting may occure sql injection ",
       "reference" : "https://laravel.com/docs/4.2/queries#raw-expressions",
       "risk" : 5
