@@ -3,9 +3,11 @@ import os
 import json 
 import re
 
-
+#default 3+3, 6lines will show you
 DEFAULT_LINES = 3 
-#EXCLUDE_EXTS = [ "jpg", "png", "jpeg", "ico", "gif", "tif" , "tiff", "bmp" ] 
+#basic ignore image files 
+DEFAULT_IGNORE = [ "jpg", "png", "jpeg", "ico", "gif", "tif" , "tiff", "bmp" ] 
+#default knowledge based database file 
 KBDB_FILE = "kbdb.json"
 
 def debug_print(str):
@@ -149,7 +151,11 @@ def search(dirname):
 		for filename in files:
 			full_filename = path + "/" + filename 
 			(base, ext ) = os.path.splitext( full_filename ) 
-			exclude_exts = config.ignore_files 
+			if(config.ignore_files):
+				exclude_exts = config.ignore_files 
+			else:
+				exclude_exts = DEFAULT_IGNORE
+
 			if any(x in ext for x in exclude_exts):
 				continue 
 			else : # start audit 
