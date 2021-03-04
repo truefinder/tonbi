@@ -4,21 +4,24 @@ import json
 
 
 DEFAULT_LINES = 3 
-DEBUG = 0 
 EXCLUDE_EXTS = [ "jpg", "png", "jpeg", "ico", "gif", "tif" , "tiff", "bmp" ] 
 KBDB_FILE = "kbdb.json"
 
 def debug_print(str):
-	if DEBUG : 
+	if config.debug_mode : 
 		print( str) 
 
-class Config :
+class Config : 
+	debug_mode = 0 
+	config_file =""
 	source_directory = ""
 	platform_name = ""
 	template_name = "" 
 	head_count = DEFAULT_LINES 
 	tail_count = DEFAULT_LINES 
 	output = ""
+	plugins = []
+
 
 class Kbdb :
 	dic = "" 
@@ -33,8 +36,24 @@ def prepare_output():
 
 
 def check_config():
-	print("check configuration") 
+    print("check configuration") 
 
+def load_config():
+	print("load config setting ")
+	with open ( config.config_file ) as f:
+		config_dic = json.load(f)
+		debug_print(config_dic) 
+		# TODO set config dic 
+		config.source_directory = config_dic["source_directory"] 
+		config.platform_name = config_dic["platform_name"] 
+		config.head_count = config_dic["head_count"] 
+		config.tail_count = config_dic["tail_count"] 
+
+		if(config.template_name) :
+			config.template_name = config_dic["template_name"] 
+		if(config.output):
+			config.oupput = (config_dic["output"] )
+        
 def load_platform() :
 	print ("load platform ..." )
 	filename = "./platform/" + config.platform_name + "/" + KBDB_FILE
@@ -128,37 +147,47 @@ def main():
 	usage = "usage: %prog [options] arg"
 	parser = OptionParser(usage)
 
-	parser.add_option("-d", "--directory", dest="directory", metavar="DIR", help="web application source code directory")
+	parser.add_option("-c", "--config", dest="config", metavar="CONFIG", help="use config file config.json")
+	parser.add_option("-d", "--directory", dest="directory", metavar="DIR", help="source code directory")
 	parser.add_option("-p", "--platform", dest="platform", metavar="PLATFORM", help="platform name ex) laravel ")
 	parser.add_option("-t", "--template", dest="template", metavar="TEMPLATE", help="template name ex) twig")
 	parser.add_option("--head",  type="int", dest="head", help="show previous <num> lines")
 	parser.add_option("--tail",  type="int", dest="tail", help="show below <num> lines")
+	parser.add_option("-D", "--debug", help="for debug mode", action="store_false")
 	parser.add_option("-o",  "--output", dest="output", metavar="OUTPUT", help="save result into file")
 
 	(options, args) = parser.parse_args()
 
-	if (options.directory):
-		config.source_directory = options.directory 
-	else:
-		parser.error("app source directory not defined")
- 
-	if (options.platform):
-		config.platform_name = options.platform 
-	else :
-		parser.error("app platform name not defined")  
+	if( options.debug ):
+ 		config.debug_mode = 1
 
-	if (options.template):
-		config.template_name = options.template 
+	if (options.config): 
+		config.config_file = options.config 
+		load_config()
 
-	if (options.output):
-		config.output = options.output 
+	else : 
+		if (options.directory):
+				config.source_directory = options.directory 
+		else:
+				parser.error("app source directory not defined")
+
+		if (options.platform):
+				config.platform_name = options.platform 
+		else :
+				parser.error("app platform name not defined")  
+
+		if (options.template):
+				config.template_name = options.template 
+
+		if (options.output):
+				config.output = options.output 
 
 
-	if (options.head):
-		config.head_count = options.head 
+		if (options.head):
+				config.head_count = options.head 
 
-	if (options.tail):
-		config.tail_count = options.tail 
+		if (options.tail):
+				config.tail_count = options.tail 
 
 	check_config() 
 

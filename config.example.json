@@ -1,0 +1,10 @@
+{
+	"source_directory" : "../sample/codeigniter/web-source",
+	"platform_name" : "codeigniter",
+	"head_count" : 5,
+	"tail_count" : 5,
+	"template_name" : "",
+	"output" : "output.txt",
+	"plugins" : [ "" ]
+}
+
