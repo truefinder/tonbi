@@ -6,6 +6,7 @@ import json
 DEFAULT_LINES = 3 
 DEBUG = 0 
 EXCLUDE_EXTS = [ "jpg", "png", "jpeg", "ico", "gif", "tif" , "tiff", "bmp" ] 
+KBDB_FILE = "kbdb.json"
 
 def debug_print(str):
 	if DEBUG : 
@@ -36,7 +37,7 @@ def check_config():
 
 def load_platform() :
 	print ("load platform ..." )
-	filename = "./platform/" + config.platform_name + "/kbdb.json" 
+	filename = "./platform/" + config.platform_name + "/" + KBDB_FILE
 	with open( filename  ) as f : 
 		kbdb.dic = json.load(f) 
 		debug_print(kbdb.dic) 
