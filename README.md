@@ -21,6 +21,24 @@ $tonbi -d <source> -p <platform> -t <template> --head <num> --tail <num> -o resu
 -tail <n> display tail n line 
 -o <output> save result into text file
 
+$tonbi -d ./src -p your_platform --head 3 --tail 3 -o output.txt
+```
+
+## Usage with config.json
+create config.json like below
+
+```
+{
+	"source_directory" : "../sample/codeigniter/web-source",
+	"platform_name" : "codeigniter",
+	"head_count" : 5,
+	"tail_count" : 5,
+	"template_name" : "",
+	"output" : "output.txt",
+	"plugins" : [ "" ]
+}
+
+$tonbi -c config.json 
 ```
 
 ## Supported platform 
@@ -32,12 +50,12 @@ $tonbi -d <source> -p <platform> -t <template> --head <num> --tail <num> -o resu
     - rails 
 
 
-## Adding your own foundings to KBDB
+## Add your own foundings to KBDB
 ```
 mkdir platform/exmaple 
 cat > platform/example/kbdb.json
 {
-	plugin : "example"
+	platform : "example"
 	version : "3"
 	items : 
 	[ 
@@ -57,10 +75,20 @@ cat > platform/example/kbdb.json
 	]
 }
 
+```
 
-$tonbi -d ./src -p example --head 3 --tail 3 -o result.txt
+## Participate with your own plugin 
+```
+mkdir plugin/your_plugin
+cat > plugin/your_plugin/your_plugin.py
+
+class your_plugin:
+	def run(line, head, tail):
+		# your_code 
+			
 
 ```
+
 
 ## Result 
 ```
