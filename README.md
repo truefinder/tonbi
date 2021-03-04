@@ -81,9 +81,12 @@ cat > platform/your_platform/kbdb.json
 }
 ```
 Keyword is based on regex, if your regular expression keyword "appView\(", 
-please kindly add it after json escape json.dumps("appView\(") 
-returns "appView\\\\("
-
+please kindly add it after json escape 
+```
+>import json 
+>json.dumps("appView\(") 
+"appView\\\\("
+```
 ## Participate with your own plugin 
 ```
 mkdir plugin/your_plugin
