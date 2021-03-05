@@ -34,10 +34,15 @@ class Plugin:
 class Kbdb :
 	dic = "" 
 
-
 class Output :
 	list = [] 
 
+class AuditItem:
+	output = ""
+	lines = ""
+	line = ""
+	i = 0 
+	filename = "" 
 
 config = Config() 
 kbdb = Kbdb() 
@@ -48,7 +53,6 @@ def prepare_output():
 	if(config.output):
 		if( os.path.exists( config.output)):
 			os.remove(config.output)
-
 
 def check_config():
     print("check configuration") 
@@ -69,7 +73,10 @@ def load_config():
 			config.template_name = config_dic["template_name"] 
 
 		if(config_dic["output"]):
-			config.output = (config_dic["output"] )
+			config.output = config_dic["output"] 
+		
+		if(config_dic["plugins"]):
+			config.plugins = config_dic["plugins"] 
 
 	debug_print("config_dic")
 	
@@ -126,15 +133,17 @@ def load_plugin() :
 	
 	# python 3.5~ 
 	for p in config.plugins :
-		plugin_filename = "./plugin/" + p + ".py"
+		plugin_filename = "./plugin/" + p + "/" + p + ".py"
 		plugin.dic[p] = import_path(plugin_filename)
 	
 		# myplugin = plugin.dic["myplugin"].myplugin()
 		# myplugin.init() 
-		plugin.objs[p] = plugin.dic[p].myplugin()
-		plugin.objs[p].init() 
+		plugin.objs[p] = plugin.dic[p].myplugin() # class myplugin() 
+		plugin.objs[p].init() # myplugin.init()		
 
-		
+def unload_plugin():
+	for p in config.plugins :
+		plugin.objs[p].finish() # myplugin.finish()	
 
 def start_audit() : 
 	print("start audit ...") 
@@ -157,6 +166,19 @@ def sequence_find( line, keyword_array):
 	else:
 		return False 
 	
+def scrap_lines(line, datafile, i):
+	lines =""
+	head_n = i-config.head_count
+	tail_n = i+config.tail_count+1
+
+	if ( head_n > 0 and tail_n < len(datafile) ):
+		j = head_n 
+		for x in datafile[head_n:tail_n] : 
+			lines += str(j) + ": " + x
+			j =j +1 
+		else : 
+			lines += str(i) + ": " + line 
+	return lines 
 
 def audit( filename) :
 	print("audit file with kbdb : " + filename ) 
@@ -164,7 +186,12 @@ def audit( filename) :
 		i = 0
 		lines = ""
 		datafile = f.readlines()
+		audititem = AuditItem() 
+		audititem.output = output
+		AuditItem.filename = filename 
+		
 		for line in datafile :
+			#1. general platform kbdb search
 			for item in kbdb.dic["items"] : 
 				debug_print("json escape : " + item["keyword"])
 				#if any(x in line for x in item["keyword"]):
@@ -185,9 +212,17 @@ def audit( filename) :
 					else : 
 						lines += str(i) + ": " + line 
 
-					
 					add_vulnerability(filename, lines, item, match) 
 					lines = ""
+			#2. plugin search 
+			for p in config.plugins :
+				audititem.lines = scrap_lines(line, datafile,i)
+				audititem.line = line 
+				audititem.i = i 
+				
+				plugin.objs[p].audit(audititem) # myplugin.audit()	
+				
+
 			i = i+1 
 
 def search(dirname):
@@ -264,6 +299,8 @@ def main():
 	start_audit() 
 
 	print_output()
+
+	unload_plugin() 
 
 
 if __name__ == "__main__":
