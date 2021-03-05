@@ -1,23 +1,19 @@
 
 import re
 '''
-class myplugin :
+# please write class MyPlugin 
+# define three functions init, audit, finish
+
+class MyPlugin :
     def init(self):
         # firstly loaded 
     def audit(self, line, lines, output):
         # called by every line 
     def finish(self)
-        # please clear all resource 
+        # please clear all resources when finished 
+''' 
 
-class AuditItem:
-	output = ""
-	lines = ""
-	line = ""
-	i = 0 
-	filename = "" 
-'''
-
-class myplugin:
+class MyPlugin:
     danger_php_functions = [
         "passthru\\(", "exec\\(", "shell_exec\\(", "phpinfo\\(", "popen\\(", "system\\("
         ]
@@ -25,8 +21,20 @@ class myplugin:
     def init(self):
         print("dangerphp init")
 
+
     def audit(self,audititem):
         #print("match")
+
+        '''
+        audititem (class AuditItem) parametered to your audit()     
+            .line <= (string) target string 
+            .i <= (int) target line number 
+            .filename <= (string) target filename  
+            .lines <= (string) use this reference lines when you find out something  
+            .output <= (Class Output) for your result, use output.list.append("your string") 
+            
+        '''
+        
         for key in self.danger_php_functions : 
             match = re.search(key, audititem.line)
             if match : 

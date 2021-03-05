@@ -30,6 +30,15 @@ class Config :
 class Plugin:
 	dic = dict()
 	objs = dict() 
+'''
+class MyPlugin :
+    def init(self):
+        # firstly loaded 
+    def audit(self, line, lines, output):
+        # called by every line 
+    def finish(self)
+        # please clear all resource 
+'''
 
 class Kbdb :
 	dic = "" 
@@ -136,14 +145,14 @@ def load_plugin() :
 		plugin_filename = "./plugin/" + p + "/" + p + ".py"
 		plugin.dic[p] = import_path(plugin_filename)
 	
-		# myplugin = plugin.dic["myplugin"].myplugin()
+		# myplugin = plugin.dic["myplugin"].MyPlugin()
 		# myplugin.init() 
-		plugin.objs[p] = plugin.dic[p].myplugin() # class myplugin() 
-		plugin.objs[p].init() # myplugin.init()		
+		plugin.objs[p] = plugin.dic[p].MyPlugin() # class MyPlugin() 
+		plugin.objs[p].init() # MyPlugin.init()		
 
 def unload_plugin():
 	for p in config.plugins :
-		plugin.objs[p].finish() # myplugin.finish()	
+		plugin.objs[p].finish() # MyPlugin.finish()	
 
 def start_audit() : 
 	print("start audit ...") 
@@ -220,7 +229,7 @@ def audit( filename) :
 				audititem.line = line 
 				audititem.i = i 
 				
-				plugin.objs[p].audit(audititem) # myplugin.audit()	
+				plugin.objs[p].audit(audititem) # MyPlugin.audit()	
 				
 
 			i = i+1 
