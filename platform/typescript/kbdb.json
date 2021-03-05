@@ -1,0 +1,111 @@
+{
+	"platform" : "typescript",
+	"version" : "1",
+	"items": 
+	[ 
+		{
+			"vulnerability" : "xss"  ,
+			"keyword" : "\\.send\\(" , 
+			"description" : "res.send() needs sanitaize() " , 
+			"reference" : "https://" 
+		},
+
+		{
+			"vulnerability" : "sql" ,
+			"keyword" : "db\\.query\\(" ,
+			"description" : "un-parameterized query occur sql injection (without =?)  ", 
+			"reference" : "https://" 
+        },
+
+        {
+			"vulnerability" : "xxe" ,
+			"keyword" : "libxmljs\\.parseXmlString.*noent.*true" ,
+			"description" : "network access is allowed which can lead to SSRF vulnerabilities  ", 
+			"reference" : "https://" 
+        },
+
+        {
+			"vulnerability" : "dir" ,
+			"keyword" : "\\.readFileSync\\(" ,
+			"description" : "fs.readFileSync() provide no sanitize, directory travesal  ", 
+			"reference" : "https://" 
+        },
+
+        
+        {
+			"vulnerability" : "crypto" ,
+			"keyword" : "crypto\\.createHash\\(.*sha1" ,
+			"description" : "sha1 is now vulnerable, use sha256  ", 
+			"reference" : "https://" 
+        },
+
+        {
+			"vulnerability" : "crypto" ,
+			"keyword" : "crypto\\.createCipheriv.*AES\\-128\\-" ,
+			"description" : "AES-128-CBC, ECB is out of data, use AES-256-GCM", 
+			"reference" : "https://" 
+        },
+
+        {
+			"vulnerability" : "sql" ,
+			"keyword" : "\\.query\\(.*\\+" ,
+			"description" : "mysql, mysql2, pg, sequelize query should use with prepared =?, value  ", 
+			"reference" : "https://" 
+        },
+
+        {
+			"vulnerability" : "cmd" ,
+			"keyword" : "eval\\(|Function\\(" ,
+			"description" : "mysql, mysql2, pg, sequelize query should use with prepared =?, value  ", 
+			"reference" : "https://" 
+        },
+
+        {
+			"vulnerability" : "cmd" ,
+			"keyword" : "\\.exec\\(|\\.execSync\\(|\\.spawn\\(|\\.spanSync\\(|\\.execFile\\(|\\.execFileSync\\(" ,
+			"description" : "os shell command functions, check if user input reach to parameter ", 
+			"reference" : "https://" 
+        },
+
+        {
+			"vulnerability" : "xss"  ,
+			"keyword" : "Mustache\\.escape.*=" , 
+			"description" : "mustache template escapes html, xss possible" , 
+			"reference" : "https://" 
+		},
+
+        
+        {
+			"vulnerability" : "xss"  ,
+			"keyword" : "Handlebars\\.compile.*noEscape" , 
+			"description" : "handlebars template escapes html, xss possible" , 
+			"reference" : "https://" 
+        },
+        
+        {
+			"vulnerability" : "xss"  ,
+			"keyword" : "markdownIt\\(.*html.*true" , 
+			"description" : "markdownit template escapes html, xss possible" , 
+			"reference" : "https://" 
+        },
+        {
+			"vulnerability" : "xss"  ,
+			"keyword" : "marked\\.setOptions\\(.*sanitize.*false" , 
+			"description" : "marked template escapes html, xss possible" , 
+			"reference" : "https://" 
+        },
+        {
+			"vulnerability" : "xss"  ,
+			"keyword" : "Renderer\\(.*sanitize.*false" , 
+			"description" : "kramed template escapes html, xss possible" , 
+			"reference" : "https://" 
+        },
+        {
+			"vulnerability" : "dns"  ,
+			"keyword" : "dnsPrefetchControl\\(.*allow.*true" , 
+			"description" : "Dns prefeching occurs, it results sensitive information disclourse " , 
+			"reference" : "https://" 
+        }
+        
+	]
+}
