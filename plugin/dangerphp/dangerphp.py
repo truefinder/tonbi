@@ -7,7 +7,7 @@ import re
 class MyPlugin :
     def init(self):
         # firstly loaded 
-    def audit(self, line, lines, output):
+    def audit(self, audititem):
         # called by every line 
     def finish(self)
         # please clear all resources when finished 

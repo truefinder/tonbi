@@ -89,17 +89,30 @@ please kindly do json escape with json.dumps() before write kbdb.json
 ```
 
 ## Participate with your own plugin 
+please create plugin file 
 ```
 mkdir plugin/your_plugin
 cat > plugin/your_plugin/your_plugin.py
-
-class your_plugin:
-	def run(line, head, tail):
-		# your_code 
-			
-
 ```
 
+And, please write class MyPlugin 
+define three functions init(), audit(), finish()
+```
+class MyPlugin :
+    def init(self):
+        # firstly loaded 
+    def audit(self, audititem):
+        # called by every line 
+		# audititem (class AuditItem) parametered to your audit()     
+        #    .line <= (string) target string 
+        #    .i <= (int) target line number 
+        #    .filename <= (string) target filename  
+        #    .lines <= (string) use this reference lines when you find out something  
+        #    .output <= (Class Output) for your result, use output.list.append("your string") 
+                    
+    def finish(self)
+        # please clear all resources when finished 
+```
 
 ## Result 
 ```
