@@ -1,4 +1,4 @@
 config.json
 output.txt
-./__pycache__/*
+./plugin/dangerphp/__pycache__/*
 
