@@ -2,6 +2,7 @@ from optparse import OptionParser
 import os
 import json 
 import re
+import importlib
 
 #default 3+3, 6lines will show you
 DEFAULT_LINES = 3 
@@ -26,12 +27,22 @@ class Config :
 	plugins = []
 	ignore_files = [] 
 
+class Plugin:
+	dic = dict()
+	objs = dict() 
 
 class Kbdb :
 	dic = "" 
 
+
+class Output :
+	list = [] 
+
+
 config = Config() 
 kbdb = Kbdb() 
+plugin = Plugin() 
+output = Output()
 
 def prepare_output():
 	if(config.output):
@@ -62,7 +73,6 @@ def load_config():
 
 	debug_print("config_dic")
 	
-
         
 def load_platform() :
 	print ("load platform ..." )
@@ -71,26 +81,60 @@ def load_platform() :
 		kbdb.dic = json.load(f) 
 		debug_print(kbdb.dic) 
 
-def show_vulnerability(filename, lines, item):
+def add_vulnerability(filename, lines, item, match):
 	vulnerability = ""
 	vulnerability += "==================================================\n" 
 	vulnerability += "vulnerability : " + item["vulnerability"] + "\n"  
 	vulnerability += "description : " + item["description"]  + "\n" 
+	if (config.debug_mode):
+		vulnerability += "vulnerability : " + match[0] + "\n"  
 	vulnerability += "reference : " + item["reference"]  + "\n" 
 	vulnerability += "filename : " + filename  + "\n" 
 	vulnerability += "=================================================\n" 
 	vulnerability += lines + "\n" 
 
+	output.list.append(vulnerability)
+
+
+def print_output():
 	if ( config.output) : 
 		with open(config.output, "a") as f : 
-			f.write( vulnerability) 
-			f.close()
+			for  vul in Output.list :
+				f.write( vul) 
+			f.close()	
 	else:
-		print(vulnerability) 
+		for vul in Output.list :
+			print(vul) 
+			
+
+
+def import_path(path):
+	#module_name = os.path.basename(path).replace('-', '_')
+	module_name = os.path.basename(path)
+	spec = importlib.util.spec_from_loader(
+		module_name,
+		importlib.machinery.SourceFileLoader(module_name, path)
+	)
+	module = importlib.util.module_from_spec(spec)
+	spec.loader.exec_module(module)
+	#sys.modules[module_name] = module
+	return module
 
 
 def load_plugin() : 
 	print ("load plugin ..." )
+	
+	# python 3.5~ 
+	for p in config.plugins :
+		plugin_filename = "./plugin/" + p + ".py"
+		plugin.dic[p] = import_path(plugin_filename)
+	
+		# myplugin = plugin.dic["myplugin"].myplugin()
+		# myplugin.init() 
+		plugin.objs[p] = plugin.dic[p].myplugin()
+		plugin.objs[p].init() 
+
+		
 
 def start_audit() : 
 	print("start audit ...") 
@@ -122,12 +166,12 @@ def audit( filename) :
 		datafile = f.readlines()
 		for line in datafile :
 			for item in kbdb.dic["items"] : 
-				debug_print(item["keyword"])
+				debug_print("json escape : " + item["keyword"])
 				#if any(x in line for x in item["keyword"]):
 				#if(sequence_find(line, item["keyword"])):
 				key = item["keyword"]
-				key = key.replace('\\\\','\\')
-				debug_print(key)
+				#key = key.replace('\\\\','\\')
+				#debug_print("json escaped: " + key)
 				match = re.search(key, line)
 				if match:
 					head_n = i-config.head_count
@@ -142,7 +186,7 @@ def audit( filename) :
 						lines += str(i) + ": " + line 
 
 					
-					show_vulnerability(filename, lines, item) 
+					add_vulnerability(filename, lines, item, match) 
 					lines = ""
 			i = i+1 
 
@@ -218,6 +262,9 @@ def main():
 	prepare_output()
 
 	start_audit() 
+
+	print_output()
+
 
 if __name__ == "__main__":
     main()

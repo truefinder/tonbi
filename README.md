@@ -66,14 +66,14 @@ cat > platform/your_platform/kbdb.json
 	[ 
 		{
 			vulnerability : "xss"  ,
-			keyword : "appView\\\\("  , 
+			keyword : "appView\\("  , 
 			description : "appView function displays non-sanitized input data from user" , 
 			reference : "http://" 
 		},
 
 		{
 			vulnerability : "cmd" ,
-			keyword : "excuteCmd\\\\(" 
+			keyword : "excuteCmd\\(" 
 			description : "excuteCmd function excute cli on server ", 
 			reference : "http://" 
 		}
@@ -81,12 +81,13 @@ cat > platform/your_platform/kbdb.json
 }
 ```
 Keyword is based on regex, if your regular expression keyword "appView\(", 
-please kindly add it after json escape 
+please kindly do json escape with json.dumps() before write kbdb.json 
 ```
 >import json 
->json.dumps("appView\(") 
-"appView\\\\("
+>print(json.dumps("appView\(") )
+"appView\\("
 ```
+
 ## Participate with your own plugin 
 ```
 mkdir plugin/your_plugin

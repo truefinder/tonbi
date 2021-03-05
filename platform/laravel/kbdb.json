@@ -14,7 +14,7 @@
     {
       "vulnerability" : "cmd",
       "keyword" : 
-        " Artisan::call\\\\(|Artisan::queue\\\\("
+        " Artisan::call\\(|Artisan::queue\\("
       ,
       "description" : "Artisan::call may occur command execution vulnerability",
       "reference" : "https://laravel.com/docs/8.x/artisan#programmatically-executing-commands",
@@ -23,7 +23,7 @@
     {
       "vulnerability" : "cmd",
       "keyword" : 
-         "\\\\$this->call\\\\(|\\\\$this->callSilently\\\\("
+         "\\$this->(call|callSilently)\\("
       ,
       "description" : "call() may occur command execution vulnerability",
       "reference" : "https://laravel.com/docs/8.x/artisan#programmatically-executing-commands",
@@ -41,7 +41,7 @@
     {
       "vulnerability" : "sql",
       "keyword" : 
-        "unprepared\\\\("
+        "unprepared\\("
       ,
       "description" : "dangerous function",
       "reference" : "https://laravel.com/api/5.8/Illuminate/Database/ConnectionInterface.html#method_unprepared",
@@ -50,7 +50,7 @@
     {
       "vulnerability" : "sql",
       "keyword" : 
-        "DB::(select|insert|delete|update|statement)\\\\("
+        "DB::(select|insert|delete|update|statement)\\("
       ,
       "description" : "dangerous function",
       "reference" : "https://laravel.com/docs/5.3/database#listening-for-query-events",
@@ -59,7 +59,7 @@
     {
       "vulnerability" : "sql",
       "keyword" : 
-        "fromRaw|whereRaw\\\\("
+        "fromRaw|whereRaw\\("
       ,
       "description" : "direct sql summitting may occure sql injection ",
       "reference" : "https://laravel.com/docs/4.2/queries#raw-expressions",
@@ -69,7 +69,7 @@
     {
       "vulnerability" : "sql",
       "keyword" : 
-        "DB::raw\\\\("
+        "DB::raw\\("
       ,
       "description" : "direct sql summitting may occure sql injection ",
       "reference" : "https://laravel.com/docs/4.2/queries#raw-expressions",
