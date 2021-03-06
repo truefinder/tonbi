@@ -41,6 +41,7 @@ create config.json like below
 	"output" : "output.txt",
 	"plugins" : [ "" ],
 	"ignore_files" :  [ "jpg", "png", "jpeg", "ico", "gif", "tif" , "tiff", "bmp" ] 
+	"ignore_dirs" : ["node_modules"] 
 }
 
 $tonbi -c config.json 

@@ -11,9 +11,11 @@ DEFAULT_IGNORE = [ "jpg", "png", "jpeg", "ico", "gif", "tif" , "tiff", "bmp" ]
 #default knowledge based database file 
 KBDB_FILE = "kbdb.json"
 
+
 def debug_print(str):
 	if config.debug_mode : 
 		print( str) 
+
 
 class Config : 
 	debug_mode = 0 
@@ -26,6 +28,8 @@ class Config :
 	output = ""
 	plugins = []
 	ignore_files = [] 
+	ignore_dirs = [] 
+
 
 class Plugin:
 	dic = dict()
@@ -40,11 +44,14 @@ class MyPlugin :
         # please clear all resource 
 '''
 
+
 class Kbdb :
 	dic = "" 
 
+
 class Output :
 	list = [] 
+
 
 class AuditItem:
 	output = ""
@@ -53,18 +60,22 @@ class AuditItem:
 	i = 0 
 	filename = "" 
 
+
 config = Config() 
 kbdb = Kbdb() 
 plugin = Plugin() 
 output = Output()
+
 
 def prepare_output():
 	if(config.output):
 		if( os.path.exists( config.output)):
 			os.remove(config.output)
 
+
 def check_config():
     print("check configuration") 
+
 
 def load_config():
 	print("load config setting ")
@@ -86,6 +97,9 @@ def load_config():
 		
 		if(config_dic["plugins"]):
 			config.plugins = config_dic["plugins"] 
+		
+		if(config_dic["ignore_dirs"]):
+			config.ignore_dirs = config_dic["ignore_dirs"]
 
 	debug_print("config_dic")
 	
@@ -97,6 +111,7 @@ def load_platform() :
 		kbdb.dic = json.load(f) 
 		debug_print(kbdb.dic) 
 
+
 def add_vulnerability(filename, lines, item, match):
 	vulnerability = ""
 	vulnerability += "==================================================\n" 
@@ -107,8 +122,7 @@ def add_vulnerability(filename, lines, item, match):
 	vulnerability += "reference : " + item["reference"]  + "\n" 
 	vulnerability += "filename : " + filename  + "\n" 
 	vulnerability += "=================================================\n" 
-	vulnerability += lines + "\n" 
-
+	vulnerability += lines + "\n"
 	output.list.append(vulnerability)
 
 
@@ -122,7 +136,6 @@ def print_output():
 		for vul in Output.list :
 			print(vul) 
 			
-
 
 def import_path(path):
 	#module_name = os.path.basename(path).replace('-', '_')
@@ -150,13 +163,16 @@ def load_plugin() :
 		plugin.objs[p] = plugin.dic[p].MyPlugin() # class MyPlugin() 
 		plugin.objs[p].init() # MyPlugin.init()		
 
+
 def unload_plugin():
 	for p in config.plugins :
 		plugin.objs[p].finish() # MyPlugin.finish()	
 
+
 def start_audit() : 
 	print("start audit ...") 
 	search( config.source_directory) 
+
 
 def sequence_find( line, keyword_array):
 	n = 0
@@ -175,6 +191,7 @@ def sequence_find( line, keyword_array):
 	else:
 		return False 
 	
+
 def scrap_lines(line, datafile, i):
 	lines =""
 	head_n = i-config.head_count
@@ -188,6 +205,7 @@ def scrap_lines(line, datafile, i):
 		else : 
 			lines += str(i) + ": " + line 
 	return lines 
+
 
 def audit( filename) :
 	print("audit file with kbdb : " + filename ) 
@@ -231,11 +249,14 @@ def audit( filename) :
 				
 				plugin.objs[p].audit(audititem) # MyPlugin.audit()	
 				
-
 			i = i+1 
 
+
 def search(dirname):
-	for (path, dir, files) in os.walk(dirname):
+	for (path, dirs, files) in os.walk(dirname):
+		if (config.ignore_dirs):
+			dirs[:] = [d for d in dirs if d not in config.ignore_dirs]
+			
 		for filename in files:
 			full_filename = path + "/" + filename 
 			(base, ext ) = os.path.splitext( full_filename ) 
@@ -310,7 +331,6 @@ def main():
 	print_output()
 
 	unload_plugin() 
-
 
 if __name__ == "__main__":
     main()
