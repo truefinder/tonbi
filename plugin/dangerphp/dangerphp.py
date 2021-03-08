@@ -18,9 +18,17 @@ class MyPlugin:
         "passthru\\(", "exec\\(", "shell_exec\\(", "phpinfo\\(", "popen\\(", "system\\("
         ]
     
+    regex_keys = ""
+
     def init(self):
         print("dangerphp init")
-
+        filename = "./plugin/dangerphp/dangerphp.db"
+        with open( filename  ) as f : 
+            self.regex_keys = f.readlines()
+            f.close() 
+            #print(self.regex_keys)
+            #input()
+            
 
     def audit(self,audititem):
         #print("match")
@@ -34,9 +42,12 @@ class MyPlugin:
             .output <= (Class Output) for your result, use output.list.append("your string") 
             
         '''
-        
-        for key in self.danger_php_functions : 
-            match = re.search(key, audititem.line)
+        for key in self.regex_keys : 
+            if not (key):
+                print("error no key...")
+                exit 
+
+            match = re.search( key, audititem.line)
             if match : 
                 vulnerability  = "==============================================\n"
                 vulnerability += "dangerous php function : " + key + "\n"
@@ -45,6 +56,7 @@ class MyPlugin:
                 vulnerability += audititem.lines 
                 
                 audititem.output.list.append(vulnerability)
+                break; 
                      
     def finish(self):
         print("dangerphp finish")
