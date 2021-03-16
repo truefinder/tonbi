@@ -47,23 +47,26 @@ create config.json like below
 $tonbi -c config.json 
 ```
 
-## Supported platform 
-* PHP
-    - laravel, codeigniter,  ... 
-* Javascript 
-    - node.js, typescript 
-* Golang
-    - gorilla
-## Plans 
+## Platforms & Templates
+* Laravel 
+* Codeigniter
+* Node.js 
+* Typescript 
+* Gorilla
+
+## Plugins 
+* dnagerphp(dangerous php functions), 
+* dangergo(dangerous golang functions)
+
+## Update Plans 
 * PHP
     - symfony, cakephp, fuelphp, phalcon, silex, yii, ethena, 
 * Python 
     - flask, django, kivy, bottle
-*Ruby
+* Ruby
     - rails 
-
-## Supported Plugins 
-* dnagerphp, dangergo 
+* Javascript 
+    - scala 
 
 
 ## Add your own foundings to KBDB
