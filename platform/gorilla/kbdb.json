@@ -12,7 +12,7 @@
 
 		{
 			"vulnerability" : "csrf" ,
-			"keyword" : "csrf.Protect\\(",
+			"keyword" : "csrf\\.Protect\\(",
 			"description" : "check if csrf token is enough long ", 
 			"reference" : ""
 		},
