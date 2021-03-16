@@ -49,11 +49,21 @@ $tonbi -c config.json
 
 ## Supported platform 
 * PHP
-    - laravel, symfony, cakephp, codeigniter, fuelphp, phalcon, silex, yii, ethena
-* Python
+    - laravel, codeigniter,  ... 
+* Javascript 
+    - node.js, typescript 
+* Golang
+    - gorilla
+## Plans 
+* PHP
+    - symfony, cakephp, fuelphp, phalcon, silex, yii, ethena, 
+* Python 
     - flask, django, kivy, bottle
-* Ruby
+*Ruby
     - rails 
+
+## Supported Plugins 
+* dnagerphp, dangergo 
 
 
 ## Add your own foundings to KBDB
