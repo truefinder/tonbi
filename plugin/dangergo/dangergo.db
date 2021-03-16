@@ -40,3 +40,12 @@ InsecureSkipVerify
 \.ExecuteTemplate\(
 URL\.Query\( 
 QueryUnescape\(
+\.Where\(
+\.First\(
+\.Select\(
+\.Distinct\(
+\.Pluck\(
+\.Group\(
+\.Having\(
+\.Raw\(
+\.Order\(
