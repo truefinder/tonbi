@@ -4,12 +4,24 @@ import json
 import re
 import importlib
 
+
 #default 3+3, 6lines will show you
 DEFAULT_LINES = 3 
 #basic ignore image files 
 DEFAULT_IGNORE = [ "jpg", "png", "jpeg", "ico", "gif", "tif" , "tiff", "bmp" ] 
 #default knowledge based database file 
 KBDB_FILE = "kbdb.json"
+
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
 
 
 def debug_print(str):
@@ -200,7 +212,7 @@ def scrap_lines(line, datafile, i):
 	if ( head_n > 0 and tail_n < len(datafile) ):
 		j = head_n 
 		for x in datafile[head_n:tail_n] : 
-			lines += str(j) + ": " + x
+			lines += str(j) + ": " +  x 
 			j =j +1 
 		else : 
 			lines += str(i) + ": " + line 
@@ -256,7 +268,7 @@ def search(dirname):
 	for (path, dirs, files) in os.walk(dirname):
 		if (config.ignore_dirs):
 			dirs[:] = [d for d in dirs if d not in config.ignore_dirs]
-			
+
 		for filename in files:
 			full_filename = path + "/" + filename 
 			(base, ext ) = os.path.splitext( full_filename ) 

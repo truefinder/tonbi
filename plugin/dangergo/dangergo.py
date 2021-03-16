@@ -1,37 +1,18 @@
-
 import re
-'''
-# please write class MyPlugin 
-# define three functions init, audit, finish
-
-class MyPlugin :
-    def init(self):
-        # firstly loaded 
-    def audit(self, audititem):
-        # called by every line 
-    def finish(self)
-        # please clear all resources when finished 
-''' 
 
 class MyPlugin:
-    danger_php_functions = [
-        "passthru\\(", "exec\\(", "shell_exec\\(", "phpinfo\\(", "popen\\(", "system\\("
-        ]
-    
+    danger_go_functions = []
     regex_keys = ""
 
     def init(self):
-        print("dangerphp init")
-        filename = "./plugin/dangerphp/dangerphp.db"
+        print("dangergo init")
+        filename = "./plugin/dangergo/dangergo.db"
         with open( filename  ) as f : 
             self.regex_keys = f.readlines()
             f.close() 
-            #print(self.regex_keys)
-            #input()
             
 
     def audit(self,audititem):
-        #print("match")
 
         '''
         audititem (class AuditItem) parametered to your audit()     
@@ -44,6 +25,7 @@ class MyPlugin:
         '''
         for item in self.regex_keys : 
             key = item.strip() 
+            
             if not (key):
                 print("error no key...")
                 exit 
@@ -51,7 +33,7 @@ class MyPlugin:
             match = re.search( key, audititem.line)
             if match : 
                 vulnerability  = "==============================================\n"
-                vulnerability += "dangerous php function : " + key + "\n"
+                vulnerability += "dangerous go function : " + key + "\n"
                 vulnerability += "filename : " + audititem.filename + "\n"
                 vulnerability += "==============================================\n"
                 vulnerability += audititem.lines 
@@ -60,5 +42,5 @@ class MyPlugin:
                 break; 
                      
     def finish(self):
-        print("dangerphp finish")
+        print("dangergo finish")
 
