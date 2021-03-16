@@ -5,16 +5,16 @@
 	[ 
 		{
 			"vulnerability" : "xss"  ,
-			"keyword" : ["appView(", "false" ] , 
+			"keyword" : "appView\\(",
 			"description" : "appView function displays non-sanitized input data from user" , 
-			"reference" : "http://xxxxx.xxxx" 
+			"reference" : "http://blahblah" 
 		},
 
 		{
 			"vulnerability" : "cmd" ,
-			"keyword" : ["excuteCmd((" ],
+			"keyword" : "excuteCmd\\(" ,
 			"description" : "excuteCmd function excute cli on server ", 
-			"reference" : "http://yyyyyy.yyyyy" 
+			"reference" : "http://blah.blah" 
 		}
 	]
 }
