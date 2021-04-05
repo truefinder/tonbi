@@ -1,0 +1,85 @@
+rule sql_injection 
+{
+    strings : 
+        $sql1 ="Raw("
+        $sql2 ="Query("
+        $sql3 ="QueryRow("
+        $sql4 ="QueryContext(" 
+        $sql5 ="QueryRow(" 
+        $sql6 ="QueryRowContext(" 
+        $sql7 ="Where("
+        $sql8 ="First("
+        $sql9 ="Select("
+        $sql10 ="Distinct("
+        $sql11 ="Pluck("
+        $sql12 ="Group("
+        $sql13 ="Having("
+        $sql14 = "Exec("   
+        $sql15 = "ExecContext(" 
+        $op1 = "%s" 
+        $op2 = "+" 
+
+    condition:
+        (
+            $sql1 or $sql2 or $sql3 or $sql4 or $sql5 or $sql6 or $sql7 or $sql8 or 
+            $sql9 or $sql10 or $sql11 or $sql12 or $sql13 or $sql14 or $sql15
+        ) 
+        and ( $op1 or $op2 )
+}
+
+rule sql_injection2 
+{
+    strings : 
+        $sql1 = "raw" nocase 
+        $sql2 = "query" nocase 
+        $sql3 = "sql" nocase
+        $op1 = "=" 
+        $sql4 = "Sprintf("  
+        $op2 = "%s" 
+    
+    condition : 
+        ($sql1 or $sql2 or $sql3) and $op1 and ($sql4 and $op2)
+
+}
+
+rule cmd_excute
+{
+    strings : 
+        $cmd1 = "exec.Command("
+        $cmd2 = "exec.CommandContext("
+        
+    condition:
+        $cmd1 or $cmd2 
+}
+
+rule xss
+{
+    strings :
+        $xss1 = "URL.Query("
+        $xss2 = "QueryUnescape("
+        $xss3 = "WriteString("
+        $xss4 = "Write("   
+        $xss5 = "Println("   
+        
+    condition : 
+        $xss1 or $xss2 or $xss3 or $xss4 or $xss5 
+}
+
+rule file_temper 
+{
+    strings : 
+        $file1 = "Clean{"
+        $file2 = "Open("
+        $file3 = "Read("
+        $file4 = "TempFile("
+    condition : 
+        $file1 or $file2 or $file3 or $file4 
+}
+
+rule ssl 
+{
+    strings : 
+        $ssl1 = "InsecureSkipVerify." 
+    condition : 
+        $ssl1 
+}
