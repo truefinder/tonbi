@@ -1,0 +1,134 @@
+rule cmd_excute
+{
+    strings:
+        $cmd1 = "exec("
+        $cmd2 = "execFile("
+        $cmd3 = "openItem("
+        $cmd4 = "openExternal("
+        $cmd5 = "spawn(" 
+        $cmd6 = "fork("
+
+    condition:
+        any of them 
+}
+
+
+rule sql_injection1_mysql 
+{
+    strings : 
+        $sql1 = "createConnection("
+        $sql2 = "query("
+
+    condition : 
+        any of them 
+}
+
+
+rule sql_injection1_mongodb 
+{
+    strings : 
+
+        $sql1 = "connect("
+        $sql2 = "createCollection("
+        $sql3 = "collection(" 
+        $sub1 = "aggregate("
+        $sub2 = "find(" 
+        $sub3 = "insert("
+        $sub4 = "delete(" 
+        $sub5 = "update(" 
+        $sub6 = "drop(" 
+       
+    condition : 
+        ($sql1 or $sql2 ) or 
+        $sql3 and 1 of ($sub*)
+        
+}
+
+rule sql_injection2 
+{
+    strings : 
+        $sql1 = "raw" nocase 
+        $sql2 = "query" nocase 
+        $sql3 = "sql" nocase
+        $op1 = "=" 
+        $op2 = "%s" 
+        $func1 = "format("  
+        $func2 = "sprintf(" 
+    
+    condition : 
+        1 of ($sql*) and $op1 and ( 1 of ($func*) and $op2)
+}
+
+rule js_excute 
+{
+    strings : 
+        $eval1 = "$eval(" 
+        $eval2 = "setTimeout("
+        $eval3 = "setInterval("
+        $eval4 = "Function("
+    condition : 
+        any of them 
+
+}
+rule xss 
+{
+    strings : 
+       
+        $xss2 = "dangerouslySetInnerHTML"
+        $xss3 = "trustAsHtml"
+        $xss4 = "NODE_TLS_REJECT_UNAUTHORIZED"
+        $xss5 = "rejectUnauthorized"
+        $xss6 = "insecure"
+        $xss7 = "strictSSL"
+        $xss8 = "clientPemCrtSignedBySelfSignedRootCaBuffer"
+
+    condition : 
+        1 of ($xss*) and "="  
+}
+
+rule ssi 
+{
+    strings : 
+        $qoute1 = "<%"
+        $qoute2 = "%>" 
+    condition : 
+        $qoute1 and $qoute2 
+}
+
+rule cookie 
+{
+    strings :
+        $cookie = "document.cookie"
+    condition : 
+        $cookie and "=" 
+}
+
+rule electron_setting1 
+{
+    strings :
+        $fg1 = "nodeIntegration"
+        $fg2 = "nodeIntegrationInWorker"
+        $fg3 = "nodeIntegrationInSubFrames" 
+        $fg4 = "allowRunningInsecureContent"
+        $fg5 = "enableRemoteModule"
+        $fg6 = "nativeWindowOpen"
+        $fg7 = "webviewTag"
+
+        $tg1 = "contextIsolation"
+        $tg2 = "safeDialogs"
+        $tg3 = "sandbox"
+        $tg4 = "webSecurity"
+        
+    condition: 
+        1 of ($fg*) and  ":" and "true" or 
+        1 of ($tg*) and ":" and "false" 
+
+}
+
+rule electron_setting2 
+{
+    strings : 
+        $set = "preload" 
+    condition: 
+        $set and ":" 
+}

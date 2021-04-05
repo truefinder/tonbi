@@ -1,0 +1,66 @@
+rule cmd_excute
+{
+    strings:
+        $cmd1 = "exec("
+        $cmd2 = "passthru("
+        $cmd3 = "popen("
+        $cmd4 = "proc_close("
+        $cmd5 = "proc_open("
+        $cmd6 = "proc_get_status("
+        $cmd7 = "proc_nice("
+        $cmd8 = "proc_terminate("
+        $cmd9 = "shell_exec("
+        $cmd10 = "system("
+        $cmd11 = "exec("
+        $cmd12 = "passthru("
+        $cmd13 = "popen("
+        $cmd14 = "shell_exec("
+        $cmd15 = "system("
+    condition:
+        any of them 
+}
+
+rule sql_injection1
+{
+    strings : 
+        $sql1 = "mysql_query("
+        $sql2 = "mysql_db_query(" 
+       
+    condition : 
+        any of them
+}
+rule sql_injection2 
+{
+    strings : 
+        $sql1 = "raw" nocase 
+        $sql2 = "query" nocase 
+        $sql3 = "sql" nocase
+        $op1 = "=" 
+        $sql4 = "sprintf("  
+        $op2 = "%s" 
+    
+    condition : 
+        ($sql1 or $sql2 or $sql3) and $op1 and ($sql4 and $op2)
+
+}
+
+rule xss 
+{
+    strings : 
+        $xss1 = "echo("
+        $xss2 = "eval(" 
+    condition : 
+        any of them 
+}
+
+
+rule hash 
+{
+    strings :
+        $hash1 = "hash("
+        $hash2 = "hash_init("
+        $hash3 = "hash_update("
+
+    condition : 
+        any of them 
+}

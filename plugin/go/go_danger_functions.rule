@@ -20,11 +20,7 @@ rule sql_injection
         $op2 = "+" 
 
     condition:
-        (
-            $sql1 or $sql2 or $sql3 or $sql4 or $sql5 or $sql6 or $sql7 or $sql8 or 
-            $sql9 or $sql10 or $sql11 or $sql12 or $sql13 or $sql14 or $sql15
-        ) 
-        and ( $op1 or $op2 )
+        1 of ($sql*) and ( $op1 or $op2 )
 }
 
 rule sql_injection2 
@@ -34,11 +30,11 @@ rule sql_injection2
         $sql2 = "query" nocase 
         $sql3 = "sql" nocase
         $op1 = "=" 
-        $sql4 = "Sprintf("  
         $op2 = "%s" 
-    
+        $func1 = "Sprintf("  
+        
     condition : 
-        ($sql1 or $sql2 or $sql3) and $op1 and ($sql4 and $op2)
+        1 of ($sql*) and $op1 and ($func1 and $op2)
 
 }
 
@@ -49,7 +45,7 @@ rule cmd_excute
         $cmd2 = "exec.CommandContext("
         
     condition:
-        $cmd1 or $cmd2 
+        any of them 
 }
 
 rule xss
@@ -60,9 +56,8 @@ rule xss
         $xss3 = "WriteString("
         $xss4 = "Write("   
         $xss5 = "Println("   
-        
     condition : 
-        $xss1 or $xss2 or $xss3 or $xss4 or $xss5 
+        any of them
 }
 
 rule file_temper 
@@ -73,7 +68,7 @@ rule file_temper
         $file3 = "Read("
         $file4 = "TempFile("
     condition : 
-        $file1 or $file2 or $file3 or $file4 
+        any of them 
 }
 
 rule ssl 
@@ -81,5 +76,5 @@ rule ssl
     strings : 
         $ssl1 = "InsecureSkipVerify." 
     condition : 
-        $ssl1 
+        any of them 
 }

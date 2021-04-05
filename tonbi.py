@@ -221,47 +221,51 @@ def scrap_lines(line, datafile, i):
 
 def audit( filename) :
 	print("audit file with kbdb : " + filename ) 
-	with open( filename, errors='replace' ) as f :
-		i = 0
-		lines = ""
-		datafile = f.readlines()
-		audititem = AuditItem() 
-		audititem.output = output
-		AuditItem.filename = filename 
-		
-		for line in datafile :
-			#1. general platform kbdb search
-			for item in kbdb.dic["items"] : 
-				debug_print("json escape : " + item["keyword"])
-				#if any(x in line for x in item["keyword"]):
-				#if(sequence_find(line, item["keyword"])):
-				key = item["keyword"]
-				#key = key.replace('\\\\','\\')
-				#debug_print("json escaped: " + key)
-				match = re.search(key, line)
-				if match:
-					head_n = i-config.head_count
-					tail_n = i+config.tail_count+1
+	try: 
+		with open( filename, errors='replace' ) as f :
+			i = 0
+			lines = ""
+			datafile = f.readlines()
+			audititem = AuditItem() 
+			audititem.output = output
+			AuditItem.filename = filename 
+			
+			for line in datafile :
+				#1. general platform kbdb search
+				for item in kbdb.dic["items"] : 
+					debug_print("json escape : " + item["keyword"])
+					#if any(x in line for x in item["keyword"]):
+					#if(sequence_find(line, item["keyword"])):
+					key = item["keyword"]
+					#key = key.replace('\\\\','\\')
+					#debug_print("json escaped: " + key)
+					match = re.search(key, line)
+					if match:
+						head_n = i-config.head_count
+						tail_n = i+config.tail_count+1
 
-					if ( head_n > 0 and tail_n < len(datafile) ):
-						j = head_n 
-						for x in datafile[head_n:tail_n] : 
-							lines += str(j) + ": " + x
-							j =j +1 
-					else : 
-						lines += str(i) + ": " + line 
+						if ( head_n > 0 and tail_n < len(datafile) ):
+							j = head_n 
+							for x in datafile[head_n:tail_n] : 
+								lines += str(j) + ": " + x
+								j =j +1 
+						else : 
+							lines += str(i) + ": " + line 
 
-					add_vulnerability(filename, lines, item, match) 
-					lines = ""
-			#2. plugin search 
-			for p in config.plugins :
-				audititem.lines = scrap_lines(line, datafile,i)
-				audititem.line = line 
-				audititem.i = i 
-				
-				plugin.objs[p].audit(audititem) # MyPlugin.audit()	
-				
-			i = i+1 
+						add_vulnerability(filename, lines, item, match) 
+						lines = ""
+				#2. plugin search 
+				for p in config.plugins :
+					audititem.lines = scrap_lines(line, datafile,i)
+					audititem.line = line 
+					audititem.i = i 
+					
+					plugin.objs[p].audit(audititem) # MyPlugin.audit()	
+					
+				i = i+1 
+	except IOError:
+		print ("Could not read file:", filename)
+
 
 
 def search(dirname):
