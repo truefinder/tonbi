@@ -12,6 +12,24 @@ rule cmd_excute
         any of them 
 }
 
+rule file_temper
+{
+    strings: 
+        $file1 = ".IncomingForm("
+        $file2 = ".parse("
+        $file3 = ".readFile("
+        $file4 = ".appendFile("
+        $file5 = ".writeFile("
+        $file6 = ".open("
+        $file7 = ".unlink("
+        $file8 = ".rename("
+        $file9 = ".createReadStream("
+        $file10 = ".createServer("
+        $file11 = ".createTransport("
+        $file12 = ".sendMail("
+    condition : 
+        (any of them) and not ("JSON" and $file2)
+}
 
 rule sql_injection1_mysql 
 {
@@ -22,7 +40,6 @@ rule sql_injection1_mysql
     condition : 
         any of them 
 }
-
 
 rule sql_injection1_mongodb 
 {
@@ -40,8 +57,7 @@ rule sql_injection1_mongodb
        
     condition : 
         ($sql1 or $sql2 ) or 
-        $sql3 and 1 of ($sub*)
-        
+        ($sql3 and 1 of ($sub*))        
 }
 
 rule sql_injection2 
@@ -50,6 +66,7 @@ rule sql_injection2
         $sql1 = "raw" nocase 
         $sql2 = "query" nocase 
         $sql3 = "sql" nocase
+        $sql4 = "fmt" nocase 
         $op1 = "=" 
         $op2 = "%s" 
         $func1 = "format("  
@@ -76,14 +93,26 @@ rule xss
        
         $xss2 = "dangerouslySetInnerHTML"
         $xss3 = "trustAsHtml"
-        $xss4 = "NODE_TLS_REJECT_UNAUTHORIZED"
-        $xss5 = "rejectUnauthorized"
-        $xss6 = "insecure"
-        $xss7 = "strictSSL"
-        $xss8 = "clientPemCrtSignedBySelfSignedRootCaBuffer"
+       
 
     condition : 
         1 of ($xss*) and "="  
+}
+
+rule ssl 
+{
+    strings : 
+        $ssl1 = "NODE_TLS_REJECT_UNAUTHORIZED"
+        $ssl2 = "rejectUnauthorized"
+        $ssl3 = "insecure"
+        $ssl4 = "strictSSL"
+        $ssl5 = "clientPemCrtSignedBySelfSignedRootCaBuffer"
+    condition :
+        ( $ssl1 and "0" ) or 
+        ( $ssl2 and "false" ) or 
+        ( $ssl3 and "true" ) or 
+        ( $ssl4 and "false") or 
+        ( $ssl5 ) 
 }
 
 rule ssi 
@@ -118,17 +147,25 @@ rule electron_setting1
         $tg2 = "safeDialogs"
         $tg3 = "sandbox"
         $tg4 = "webSecurity"
-        
+
+        $pre = "preload" 
+
     condition: 
-        1 of ($fg*) and  ":" and "true" or 
-        1 of ($tg*) and ":" and "false" 
+        (1 of ($fg*) and ":" and "true") or 
+        (1 of ($tg*) and ":" and "false") or 
+        ($pre and ":" )
 
 }
 
-rule electron_setting2 
+rule electron_setting3 
 {
     strings : 
-        $set = "preload" 
+        $set1 = "devTools"
+        $set2 = "BrowserWindow.webContents.openDevTools("
+        $set3 = "enableWebSQL"
+        $set4 = "openExternal("
+        $set5 = "ELECTRON_RUN_AS_NODE"
     condition: 
-        $set and ":" 
+        any of them 
+        
 }

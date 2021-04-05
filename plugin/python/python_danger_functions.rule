@@ -1,0 +1,163 @@
+rule cmd_excute_python3_shellspawn
+{
+    strings:
+        $cmd1 = "run("
+        $cmd2 = "Popen("
+        $cmd3 = "call("
+        $cmd4 = "check_call("
+        $cmd5 = "check_output(" 
+
+        $opt1 = "shell=True"
+        $sys1 = "system("
+         
+    condition:
+        ((1 of ($cmd*)) and $opt1 ) or 
+        $sys1 
+
+}
+
+rule cmd_excute_python3_nospawn 
+{
+    strings:
+        // subprocess 
+        $cmd1 = "run("
+        $cmd2 = "Popen("
+        $cmd3 = "call("
+        $cmd4 = "check_call("
+        $cmd5 = "check_output("
+
+        // spawn 
+        $cmd6 = "spawnl("
+        $cmd7 = "spawnle("
+        $cmd8 = "spawnlp("
+        $cmd9 = "spawnlpe("
+        $cmd10 = "spawnv("
+        $cmd11 = "spawnve("
+        $cmd12 = "spawnvp("
+        $cmd13 = "spawnvpe("
+
+        // exec 
+        $cmd14 = "popen("
+        $cmd15 = "getstatusoutput("
+        $cmd16 = "getoutput("
+        $cmd17 = "startfile("
+        $cmd18 = "execl("
+        $cmd19 = "execle("
+        $cmd20 = "execlp("
+        $cmd21 = "execlpe("
+        $cmd22 = "execv("
+        $cmd23 = "execve("
+        $cmd24 = "execvp("
+        $cmd25 = "execvpe("
+    condition: 
+        all of them 
+
+}
+
+
+rule cmd_excute_python2
+{
+    strings:
+        $cmd1 = "popen2("
+        $cmd2 = "popen3("
+        $cmd3 = "popen4("      
+         
+    condition:
+        any of them 
+}
+
+rule file_temper
+{
+    strings: 
+        $file1 = ".NamedTemporaryFile("
+        $file2 = "tempfile.mktemp()"
+        $file3 = "umask(0)"
+        $file4 = "chmod("
+        $file5 = "lchmod("
+        $file6 = "fchmod("
+        $file7 = "chown("
+        $file8 = "rename("
+        $file9 = "remove("
+        $file10 = "extractall("
+        $file11 = "link("
+        $file12 = "unlink("
+    condition : 
+        any of them 
+}
+
+rule py_excute 
+{
+    strings : 
+        $eval1 = "eval(" 
+       
+    condition : 
+        any of them 
+
+}
+
+rule django1 
+{
+    strings:
+        $dj = "redirect("
+    condition:
+        all of them 
+
+}
+
+rule django2
+{
+    strings:
+        $dj1 = "__setitem__(" 
+    condition:
+        $dj1 and "Content-Type" 
+}
+
+rule flask1 
+{
+    strings:
+        $fl1 = "exec("
+        $fl2 = "HttpResponseRedirect("
+        $fl3 = "pickle.load(" 
+        $fl4 = "send_file(" 
+        $fl5 = "root.findall(" 
+    condition:
+        any of them 
+}
+rule flask2 
+{
+    strings: 
+        $fl1 = "yml.load(" 
+        $opt1 = "yaml.Loader"
+        $fl2 = ".add(" 
+        $opt2 = "Content-Type"
+    condition:
+        ($fl1 and $opt1 ) or  
+        ($fl2 and $opt2 ) 
+
+}
+
+rule sql_injection1
+{
+    strings : 
+        $sql1 = "query("
+        $sql2 = "execute("
+
+    condition : 
+        any of them 
+}
+
+rule sql_injection2 
+{
+    strings : 
+        $sql1 = /raw*=*%s/ nocase 
+        $sql2 = /query*=*%s/ nocase 
+        $sql3 = /sql*=*%s/ nocase
+        $sql4 = /fmt*=*%s/ nocase 
+        $sql5 = /stmt*=*%s/ nocase 
+        $sql6 = /statement*=*%s/ nocase 
+        
+    condition : 
+       any of ($sql*) 
+}
+
+

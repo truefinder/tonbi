@@ -1,13 +1,13 @@
 import re
 import yara 
 
-DEFAULT_YARA_RULE = "./plugin/nodejs/nodejs_danger_functions.rule"
+DEFAULT_YARA_RULE = "./plugin/python/python_danger_functions.rule"
 
 class MyPlugin:
     
     rules = ""
     def init(self):
-        print("nodejs plugin init")
+        print("python plugin init")
         self.rules = yara.compile(filepath=DEFAULT_YARA_RULE)
             
 
@@ -26,14 +26,15 @@ class MyPlugin:
         if match :
             length, variable, m_string = match[0].strings[0]
             vulnerability  = "==============================================\n"
-            vulnerability += "dangerous nodejs function : " + match[0].rule + "\n"
-            vulnerability += "dangerous matches : " + str(m_string,'utf-8') + "\n"
+            vulnerability += "dangerous python function : " + match[0].rule + "\n"
+            vulnerability += "dangerous matches : "  + str(m_string,'utf-8') + "\n"
             vulnerability += "filename : " + audititem.filename + "\n"
+            
             vulnerability += "==============================================\n"
             vulnerability += audititem.lines 
                 
             audititem.output.list.append(vulnerability)
                     
     def finish(self):
-        print("nodejs plugin finish")
+        print("python plugin finish")
 
