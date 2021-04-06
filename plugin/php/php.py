@@ -24,12 +24,14 @@ class MyPlugin:
         '''
         match = self.rules.match(data=audititem.line)
         if match :
+           
             vulnerability  = "==============================================\n"
-            vulnerability += "dangerous php function : " + match[0].rule + "\n"
             vulnerability += "filename : " + audititem.filename + "\n"
+            vulnerability += "dangerous php function : " + match[0].rule + "\n"
+            length, variable, m_string = match[0].strings[0]
+            vulnerability += "dangerous matches : "  + str(m_string,'utf-8') + "\n"
             vulnerability += "==============================================\n"
             vulnerability += audititem.lines 
-                
             audititem.output.list.append(vulnerability)
                     
     def finish(self):

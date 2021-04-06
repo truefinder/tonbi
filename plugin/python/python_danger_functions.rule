@@ -7,7 +7,7 @@ rule cmd_excute_python3_shellspawn
         $cmd4 = "check_call("
         $cmd5 = "check_output(" 
 
-        $opt1 = "shell=True"
+        $opt1 = "shell=True" nocase 
         $sys1 = "system("
          
     condition:
@@ -98,7 +98,7 @@ rule py_excute
 rule django1 
 {
     strings:
-        $dj = "redirect("
+        $dj1 = "redirect("
     condition:
         all of them 
 
@@ -108,8 +108,9 @@ rule django2
 {
     strings:
         $dj1 = "__setitem__(" 
+        $opt1 = "Content-Type" 
     condition:
-        $dj1 and "Content-Type" 
+        $dj1 and $opt1 
 }
 
 rule flask1 
@@ -149,15 +150,17 @@ rule sql_injection1
 rule sql_injection2 
 {
     strings : 
-        $sql1 = /raw*=*%s/ nocase 
-        $sql2 = /query*=*%s/ nocase 
-        $sql3 = /sql*=*%s/ nocase
-        $sql4 = /fmt*=*%s/ nocase 
-        $sql5 = /stmt*=*%s/ nocase 
-        $sql6 = /statement*=*%s/ nocase 
+        
+        $sql1 = "raw" nocase 
+        $sql2 = "query" nocase 
+        $sql3 = "sql" nocase
+        $sql4 = "fmt" nocase 
+        $sql5 = "stmt" nocase 
+        $sql6 = "statement" nocase 
+        $param = /.*=.*%s/ nocase 
         
     condition : 
-       any of ($sql*) 
+       1 of ($sql*) and $param 
 }
 
 

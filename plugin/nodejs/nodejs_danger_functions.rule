@@ -63,17 +63,17 @@ rule sql_injection1_mongodb
 rule sql_injection2 
 {
     strings : 
+        
         $sql1 = "raw" nocase 
         $sql2 = "query" nocase 
         $sql3 = "sql" nocase
         $sql4 = "fmt" nocase 
-        $op1 = "=" 
-        $op2 = "%s" 
-        $func1 = "format("  
-        $func2 = "sprintf(" 
-    
+        $sql5 = "stmt" nocase 
+        $sql6 = "statement" nocase 
+        $param = /.*=.*%s/ nocase 
+        
     condition : 
-        1 of ($sql*) and $op1 and ( 1 of ($func*) and $op2)
+       1 of ($sql*) and $param 
 }
 
 rule js_excute 
@@ -91,45 +91,47 @@ rule xss
 {
     strings : 
        
+        $eql = /.*=/
         $xss2 = "dangerouslySetInnerHTML"
         $xss3 = "trustAsHtml"
        
 
     condition : 
-        1 of ($xss*) and "="  
+        1 of ($xss*) and $eql 
 }
 
 rule ssl 
 {
     strings : 
+        $true = /.*:.*true/ nocase 
+        $false = /.*:.*false/ nocase 
+        $zero = /.*:.*0/ nocase 
         $ssl1 = "NODE_TLS_REJECT_UNAUTHORIZED"
         $ssl2 = "rejectUnauthorized"
         $ssl3 = "insecure"
         $ssl4 = "strictSSL"
         $ssl5 = "clientPemCrtSignedBySelfSignedRootCaBuffer"
     condition :
-        ( $ssl1 and "0" ) or 
-        ( $ssl2 and "false" ) or 
-        ( $ssl3 and "true" ) or 
-        ( $ssl4 and "false") or 
+        ( $ssl1 and $zero ) or 
+        ( ($ssl2 or $ssl4) and $false ) or 
+        ( $ssl3 and $true ) or 
         ( $ssl5 ) 
 }
 
 rule ssi 
 {
     strings : 
-        $qoute1 = "<%"
-        $qoute2 = "%>" 
+        $qoute1 = /<%.*%>/
     condition : 
-        $qoute1 and $qoute2 
+        $qoute1 
 }
 
 rule cookie 
 {
     strings :
-        $cookie = "document.cookie"
+        $cookie = /document.cookie.*=/
     condition : 
-        $cookie and "=" 
+        $cookie 
 }
 
 rule electron_setting1 
@@ -148,12 +150,15 @@ rule electron_setting1
         $tg3 = "sandbox"
         $tg4 = "webSecurity"
 
-        $pre = "preload" 
+        $pre = /preload.*:/
+
+        $true = /.*:.*true/
+        $false = /.*:.*false/ 
 
     condition: 
-        (1 of ($fg*) and ":" and "true") or 
-        (1 of ($tg*) and ":" and "false") or 
-        ($pre and ":" )
+        (1 of ($fg*) and $true) or 
+        (1 of ($tg*) and $false) or 
+        $pre
 
 }
 

@@ -209,13 +209,26 @@ def scrap_lines(line, datafile, i):
 	head_n = i-config.head_count
 	tail_n = i+config.tail_count+1
 
-	if ( head_n > 0 and tail_n < len(datafile) ):
+	if head_n > 0 :
+		if tail_n < len(datafile) :
+			j = head_n 
+			for x in datafile[head_n:tail_n] : 
+				lines += str(j) + ": " +  x 
+				j =j +1 
+		else :
+			tail_n = len(datafile)
+			j = head_n 
+			for x in datafile[head_n:tail_n] : 
+				lines += str(j) + ": " +  x 
+				j =j +1
+	else :
+		head_n = 0 
 		j = head_n 
 		for x in datafile[head_n:tail_n] : 
 			lines += str(j) + ": " +  x 
-			j =j +1 
-		else : 
-			lines += str(i) + ": " + line 
+			j =j +1
+		#lines += str(i) + ": " + line 
+	
 	return lines 
 
 

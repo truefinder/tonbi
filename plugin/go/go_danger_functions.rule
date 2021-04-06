@@ -16,8 +16,8 @@ rule sql_injection
         $sql13 ="Having("
         $sql14 = "Exec("   
         $sql15 = "ExecContext(" 
-        $op1 = "%s" 
-        $op2 = "+" 
+        $op1 = /.*%s/ 
+        $op2 = /.*\+/
 
     condition:
         1 of ($sql*) and ( $op1 or $op2 )
@@ -25,17 +25,17 @@ rule sql_injection
 
 rule sql_injection2 
 {
-    strings : 
+   strings : 
+        
         $sql1 = "raw" nocase 
         $sql2 = "query" nocase 
         $sql3 = "sql" nocase
-        $op1 = "=" 
-        $op2 = "%s" 
-        $func1 = "Sprintf("  
+        $sql5 = "stmt" nocase 
+        $sql6 = "statement" nocase 
+        $param = /.*=.*%s/ nocase 
         
     condition : 
-        1 of ($sql*) and $op1 and ($func1 and $op2)
-
+       1 of ($sql*) and $param 
 }
 
 rule cmd_excute

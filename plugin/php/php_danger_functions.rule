@@ -32,16 +32,18 @@ rule sql_injection1
 rule sql_injection2 
 {
     strings : 
+        
         $sql1 = "raw" nocase 
         $sql2 = "query" nocase 
         $sql3 = "sql" nocase
-        $op1 = "=" 
-        $sql4 = "sprintf("  
-        $op2 = "%s" 
-    
+        $sql4 = "fmt" nocase 
+        $sql5 = "stmt" nocase 
+        $sql6 = "statement" nocase 
+        $param = /.*=.*%s/ nocase 
+        
     condition : 
-        ($sql1 or $sql2 or $sql3) and $op1 and ($sql4 and $op2)
-
+       1 of ($sql*) and $param 
+    
 }
 
 rule xss 
