@@ -38,6 +38,16 @@ rule sql_injection2
        1 of ($sql*) and $param 
 }
 
+
+rule sql_injection3 
+{
+    strings : 
+        $sql1 = /(select|update|insert|delete|values|with)/ 
+        $param = /.*(%s|\+)/ nocase 
+    condition:
+       1 of ($sql*) and $param 
+}
+
 rule cmd_excute
 {
     strings : 

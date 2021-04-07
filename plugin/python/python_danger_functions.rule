@@ -54,7 +54,6 @@ rule cmd_excute_python3_nospawn
 
 }
 
-
 rule cmd_excute_python2
 {
     strings:
@@ -85,7 +84,7 @@ rule file_temper
         any of them 
 }
 
-rule py_excute 
+rule code_injection 
 {
     strings : 
         $eval1 = "eval(" 
@@ -95,47 +94,6 @@ rule py_excute
 
 }
 
-rule django1 
-{
-    strings:
-        $dj1 = "redirect("
-    condition:
-        all of them 
-
-}
-
-rule django2
-{
-    strings:
-        $dj1 = "__setitem__(" 
-        $opt1 = "Content-Type" 
-    condition:
-        $dj1 and $opt1 
-}
-
-rule flask1 
-{
-    strings:
-        $fl1 = "exec("
-        $fl2 = "HttpResponseRedirect("
-        $fl3 = "pickle.load(" 
-        $fl4 = "send_file(" 
-        $fl5 = "root.findall(" 
-    condition:
-        any of them 
-}
-rule flask2 
-{
-    strings: 
-        $fl1 = "yml.load(" 
-        $opt1 = "yaml.Loader"
-        $fl2 = ".add(" 
-        $opt2 = "Content-Type"
-    condition:
-        ($fl1 and $opt1 ) or  
-        ($fl2 and $opt2 ) 
-
-}
 
 rule sql_injection1
 {
@@ -164,3 +122,55 @@ rule sql_injection2
 }
 
 
+
+rule sql_injection3 
+{
+    strings : 
+        $sql1 = /(select|update|insert|delete|values|with)/ 
+        $param = /.*(%s|\+)/ nocase 
+    condition:
+       1 of ($sql*) and $param 
+}
+
+rule crypto 
+{
+    strings : 
+        $crypt1 = /AES\.new\(.*AES\.(MODE_ECB|MODE_ECB)/
+    condition : 
+        any of them 
+}
+
+rule jwt 
+{
+    strings:
+        $jwt1 = /jwt\.decode\(.*false/ nocase 
+        $jwt2 = "jwt.process_jwt("
+    condition:
+        any of them 
+}
+
+
+rule ldap
+{
+    strings :
+        $ldap1 = /connect.*bind.*root/ 
+    condition:
+        any of them 
+}
+
+rule ssl_method 
+{
+    strings : 
+        $ssl1 = /ssl.*context.*SSLv3/
+    condition : 
+        any of them 
+}
+
+
+rule xss2 
+{
+    strings : 
+        $auto = /Environment.*autoescape.*False/ nocase 
+    condition:
+        any of them 
+}
