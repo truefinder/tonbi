@@ -33,73 +33,59 @@ create config.json like below
 
 ```
 {
-	"source_directory" : "../sample/codeigniter/web-source",
+	"source_directory" : "../sample/codeigniter/src",
 	"platform_name" : "codeigniter",
 	"head_count" : 5,
 	"tail_count" : 5,
 	"template_name" : "",
 	"output" : "output.txt",
-	"plugins" : [ "" ],
+	"plugins" : [ "php" ],
 	"ignore_files" :  [ "jpg", "png", "jpeg", "ico", "gif", "tif" , "tiff", "bmp" ] 
 	"ignore_dirs" : ["node_modules"] 
 }
 
-$tonbi -c config.json 
+$python tonbi.py -c config.json 
 ```
 
 ## Platforms & Templates
 * Laravel 
 * Codeigniter
-* Node.js 
+* Django
+* Flask
 * Typescript 
 * Gorilla
 
-## Plugins 
-* dnagerphp(dangerous php functions), 
-* dangergo(dangerous golang functions)
+## Plugins & Language 
+* php 
+* python
+* go
+* nodejs 
 
 ## Update Plans 
 * PHP
-    - symfony, cakephp, fuelphp, phalcon, silex, yii, ethena, 
+    - symfony, cakephp, fuelphp, phalcon, silex, yii, ethna, 
 * Python 
-    - flask, django, kivy, bottle
+    - kivy, bottle
 * Ruby
     - rails 
 * Javascript 
     - scala 
 
 
-## Add your own foundings to KBDB
+## Add your own foundings to tonbi
 ```
-mkdir platform/your_platform 
-cat > platform/your_platform/kbdb.json
+touch platform/some_platform.yar 
+cat > platform/some_platform.yar
+/* some_platform vulnerable code audting rule */  
 {
-	platform : "your_platform"
-	version : "3"
-	items : 
-	[ 
-		{
-			vulnerability : "xss"  ,
-			keyword : "appView\\("  , 
-			description : "appView function displays non-sanitized input data from user" , 
-			reference : "http://" 
-		},
-
-		{
-			vulnerability : "cmd" ,
-			keyword : "excuteCmd\\(" 
-			description : "excuteCmd function excute cli on server ", 
-			reference : "http://" 
-		}
-	]
+rule code_injection : some_platform 
+{
+    strings : 
+        $code1 = "exec(" 
+        $code2 = /yml\.load\(.*yaml\.Loader/
+    condition:
+        $code1 or $code2 
 }
-```
-Keyword is based on regex, if your regular expression keyword "appView\(", 
-please kindly do json escape with json.dumps() before write kbdb.json 
-```
->import json 
->print(json.dumps("appView\(") )
-"appView\\("
 ```
 
 ## Participate with your own plugin 
@@ -117,7 +103,7 @@ class MyPlugin :
         # firstly loaded 
     def audit(self, audititem):
         # called by every line 
-		# audititem (class AuditItem) parametered to your audit()     
+	# audititem (class AuditItem) parametered to your audit()     
         #    .line <= (string) target string 
         #    .i <= (int) target line number 
         #    .filename <= (string) target filename  
@@ -128,43 +114,42 @@ class MyPlugin :
         # please clear all resources when finished 
 ```
 
-## Result 
+## Test 
 ```
+==============================================
+filename : ../targets/laravel/XXXX-Server/app/Libs/ImageMagic/Convert.php
+dangerous php function : cmd_excute
+dangerous matches : exec(
+==============================================
+35:      * @return int
+36:      */
+37:     protected function executeCommand(string $command)
+38:     {
+39:         Log::debug(__METHOD__ . ' : ' . $command);
+40:         exec($command .' 2>&1',$array, $code);
+41:         if ($code !== 0) {
+42:             // error
+43:             $errorMsg = implode($array, "\n");
+44:             Log::error(__METHOD__ . ' Convert failed. code: ' . $code);
+45:             Log::error($errorMsg);
 ==================================================
+filename : ../targets/laravel/ZZZZZ-server/resources/views/webview/information/index.blade.php
 vulnerability : xss
-description : FALSE may could occur xss, turn TRUE
-reference : http://xxxxx.xxxx
-filename : ../sample/codeigniter/lcb/app/application/config/config.production.php
+matches : {!! $detail["information"] !!}
+tag : laravel
 =================================================
-277: |
-278: | Determines whether the XSS filter is always active when GET, POST or
-279: | COOKIE data is encountered
-280: |
-281: */
-282: $config['global_xss_filtering'] = FALSE;
-283: 
-284: /*
-285: |--------------------------------------------------------------------------
-286: | Cross Site Request Forgery
-287: |--------------------------------------------------------------------------
+140:           @else
+141:             <span id="info_new">NEW</span><br>
+142:           @endif
+143: 
+144: 
+145:           <span>{!! $detail["information"] !!}</span>
+146:         </div>
+147:       </a>
+148:     </li>
+149:     @endforeach
+150:   </ul>
 
-==================================================
-vulnerability : sql
-description : direct sql summitting may occure sql injection 
-reference : https://codeigniter.com/userguide3/database/queries.html
-filename : ../sample/codeigniter/lcb/support/application/models/authenticate_model.php
-=================================================
-69:         }
-70: 
-71:         $this->session->set_userdata('username', $username);
-72: 
-73:         // Update privilege of session
-74:         $query = $this->db->query(
-75:             "UPDATE `ci_sessions` SET current_privilege=? WHERE session_id=?", array(
-76:             'current_privilege' => $result[0]->privilege,
-77:             'session_id'    => $this->session->userdata('session_id'),
-78:         ));
-79: 
 
 
 ```
