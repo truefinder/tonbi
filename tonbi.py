@@ -3,6 +3,7 @@ import os
 import json 
 import re
 import importlib
+import yara 
 
 
 #default 3+3, 6lines will show you
@@ -11,6 +12,7 @@ DEFAULT_LINES = 3
 DEFAULT_IGNORE = [ "jpg", "png", "jpeg", "ico", "gif", "tif" , "tiff", "bmp" ] 
 #default knowledge based database file 
 KBDB_FILE = "kbdb.json"
+YARA_EXT = "yar"
 
 class bcolors:
     HEADER = '\033[95m'
@@ -60,6 +62,8 @@ class MyPlugin :
 class Kbdb :
 	dic = "" 
 
+class Yara : 
+	rules = "" 
 
 class Output :
 	list = [] 
@@ -77,6 +81,7 @@ config = Config()
 kbdb = Kbdb() 
 plugin = Plugin() 
 output = Output()
+myyara = Yara() 
 
 
 def prepare_output():
@@ -116,15 +121,23 @@ def load_config():
 	debug_print("config_dic")
 	
         
-def load_platform() :
+def kbdb_load_platform() :
 	print ("load platform ..." )
 	filename = "./platform/" + config.platform_name + "/" + KBDB_FILE
 	with open( filename  ) as f : 
 		kbdb.dic = json.load(f) 
 		debug_print(kbdb.dic) 
 
+  
+def yara_load_platform() :
+	print ("load platform ..." )
+	filename = "./platform/" + config.platform_name + "." + YARA_EXT
+	with open( filename  ) as f : 
+		myyara.rules = yara.compile(filepath=filename)
+		debug_print(myyara.rules) 
 
-def add_vulnerability(filename, lines, item, match):
+
+def kbdb_add_vulnerability(filename, lines, item, match):
 	vulnerability = ""
 	vulnerability += "==================================================\n" 
 	vulnerability += "vulnerability : " + item["vulnerability"] + "\n"  
@@ -137,6 +150,23 @@ def add_vulnerability(filename, lines, item, match):
 	vulnerability += lines + "\n"
 	output.list.append(vulnerability)
 
+
+def yara_add_vulnerability(filename, lines, match):
+	length, variable, m_string = match.strings[0]
+	pattern = str(m_string, 'utf-8')
+
+	vulnerability = ""
+	vulnerability += "==================================================\n" 
+	vulnerability += "filename : " + filename  + "\n" 
+	vulnerability += "vulnerability : " +  match.rule + "\n"  
+	vulnerability += "matches : " + pattern + "\n" 
+	if (config.debug_mode):
+		vulnerability += "vulnerability : " + match[0] + "\n"  
+	if (match.tags[0]):
+		vulnerability += "tag : " + match.tags[0] + "\n" 
+	vulnerability += "=================================================\n" 
+	vulnerability += lines + "\n"
+	output.list.append(vulnerability)
 
 def print_output():
 	if ( config.output) : 
@@ -183,7 +213,7 @@ def unload_plugin():
 
 def start_audit() : 
 	print("start audit ...") 
-	search( config.source_directory) 
+	walk_around( config.source_directory) 
 
 
 def sequence_find( line, keyword_array):
@@ -232,7 +262,7 @@ def scrap_lines(line, datafile, i):
 	return lines 
 
 
-def audit( filename) :
+def kbdb_audit( filename) :
 	print("audit file with kbdb : " + filename ) 
 	try: 
 		with open( filename, errors='replace' ) as f :
@@ -265,7 +295,7 @@ def audit( filename) :
 						else : 
 							lines += str(i) + ": " + line 
 
-						add_vulnerability(filename, lines, item, match) 
+						kabdb_add_vulnerability(filename, lines, item, match) 
 						lines = ""
 				#2. plugin search 
 				for p in config.plugins :
@@ -281,7 +311,42 @@ def audit( filename) :
 
 
 
-def search(dirname):
+
+def yara_audit( filename) :
+	print("audit file with yara : " + filename ) 
+	try: 
+		with open( filename, errors='replace' ) as f :
+			i = 0
+			lines = ""
+			datafile = f.readlines()
+			audititem = AuditItem() 
+			audititem.output = output
+			AuditItem.filename = filename 
+			
+			for line in datafile :
+				#1. general platform yara search
+				matches = myyara.rules.match(data=line)
+				if matches:
+					lines = scrap_lines(line, datafile,i)
+					yara_add_vulnerability(filename, lines, matches[0]) 
+					lines = ""
+				#2. plugin search 
+				for p in config.plugins :
+					audititem.lines = scrap_lines(line, datafile,i)
+					audititem.line = line 
+					audititem.i = i 
+					
+					plugin.objs[p].audit(audititem) # MyPlugin.audit()	
+					
+				i = i+1 
+	except IOError:
+		print ("Could not read file:", filename)
+
+
+
+
+
+def walk_around(dirname):
 	for (path, dirs, files) in os.walk(dirname):
 		if (config.ignore_dirs):
 			dirs[:] = [d for d in dirs if d not in config.ignore_dirs]
@@ -298,7 +363,9 @@ def search(dirname):
 				continue 
 			else : # start audit 
 				debug_print(full_filename) 
-				audit(full_filename)
+				#kbdb_audit(full_filename)
+				yara_audit(full_filename)
+
 
 	
 def main():
@@ -349,7 +416,8 @@ def main():
 
 	check_config() 
 
-	load_platform() 
+	#kbdb_load_platform()
+	yara_load_platform() 
 
 	load_plugin() 
 
