@@ -5,14 +5,28 @@
 TONBI is a framework based web application source code auditing tool for security researchers. It supports various web application framework such as Laravel, Symfony, CakePHP, Codeigniter, ... It gives you an efficient auditing method for finding vulnerabilities of your web applications 
 
 ## Install 
-Download tonbi 
+Download tonbi from github 
 ```
 git clone http://github.com/truefinder/tonbi.git 
 ```
-
+Install yara-python 
+```
+$ pip install yara-python
+```
+But you can also get the source from GitHub and compile it yourself:
+```
+$ git clone --recursive https://github.com/VirusTotal/yara-python
+$ cd yara-python
+$ python setup.py build
+$ sudo python setup.py install
+```
+Notice the --recursive option used with git. This is important because we need to download the yara subproject containing the source code for libyara (the core YARA library). It’s also important to note that the two methods above link libyara statically into yara-python. If you want to link dynamically against a shared libyara library use:
+```
+$ python setup.py build --dynamic-linking
+```
 ## Basic Usage 
 ```
-$python tonbi.py -d ./source_dir -p your_platform -l language --head 3 --tail 3 -o output.txt
+$python tonbi.py -d ./source_dir -p your_platform -l language 
 
 ```
 
@@ -30,7 +44,7 @@ $python tonbi.py -d ./source_dir -p your_platform -l language --head 3 --tail 3 
 
 ```
 
-## Usage with config.json
+## Usage with configuration file 
 create config.json like below
 
 ```
@@ -46,7 +60,9 @@ create config.json like below
 	"ignore_files" :  [ "jpg", "png", "jpeg", "ico", "gif", "tif" , "tiff", "bmp",  "db", "css", "map", "md", "gitkeep", "sql", "DS_Store", "js", "propreties" , "csv", "gz", "tgz", "zip", "swf", "pyc", "phar" ] 
 	"ignore_dirs" : ["node_modules"] 
 }
-
+```
+And run tonbi
+```
 $python tonbi.py -c config.json 
 ```
 
