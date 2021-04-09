@@ -19,7 +19,7 @@ $tonbi -d ./source_dir -p your_platform --head 3 --tail 3 -o output.txt
 ```
 -d <source> top source code directory
 -p <paltform> server-side platform name
--l <paltform> server-side platform name   
+-l <language> source language    
 -t <template> view template name
 -head <n> display haed n line
 -tail <n> display tail n line 
@@ -41,7 +41,7 @@ create config.json like below
 	"tail_count" : 5,
 	"template_name" : "",
 	"output" : "output.txt",
-	"plugins" : [ "php" ],
+	"plugins" : [  ],
 	"ignore_files" :  [ "jpg", "png", "jpeg", "ico", "gif", "tif" , "tiff", "bmp" ] 
 	"ignore_dirs" : ["node_modules"] 
 }
