@@ -18,7 +18,8 @@ $tonbi -d ./source_dir -p your_platform --head 3 --tail 3 -o output.txt
 ## Options 
 ```
 -d <source> top source code directory
--p <paltform> server-side platform name     
+-p <paltform> server-side platform name
+-l <paltform> server-side platform name   
 -t <template> view template name
 -head <n> display haed n line
 -tail <n> display tail n line 
@@ -35,6 +36,7 @@ create config.json like below
 {
 	"source_directory" : "../sample/codeigniter/src",
 	"platform_name" : "codeigniter",
+	"language" : "php", 
 	"head_count" : 5,
 	"tail_count" : 5,
 	"template_name" : "",
@@ -54,8 +56,9 @@ $python tonbi.py -c config.json
 * Flask
 * Typescript 
 * Gorilla
+* Electron
 
-## Plugins & Language 
+## Language 
 * php 
 * python
 * go
@@ -70,7 +73,6 @@ $python tonbi.py -c config.json
     - rails 
 * Javascript 
     - scala 
-
 
 ## Add your own foundings to tonbi
 ```
@@ -88,7 +90,7 @@ rule code_injection : some_platform
 }
 ```
 
-## Participate with your own plugin 
+## Plugin : Participate with your own plugin 
 please create plugin file 
 ```
 mkdir plugin/your_plugin
