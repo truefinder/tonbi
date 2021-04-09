@@ -12,14 +12,15 @@ git clone http://github.com/truefinder/tonbi.git
 
 ## Basic Usage 
 ```
-$tonbi -d ./source_dir -p your_platform --head 3 --tail 3 -o output.txt
+$python tonbi.py -d ./source_dir -p your_platform -l language --head 3 --tail 3 -o output.txt
+
 ```
 
 ## Options 
 ```
 -d <source> top source code directory
 -p <paltform> server-side platform name
--l <language> source language    
+-l <language> source code language    
 -t <template> view template name
 -head <n> display haed n line
 -tail <n> display tail n line 
@@ -42,7 +43,7 @@ create config.json like below
 	"template_name" : "",
 	"output" : "output.txt",
 	"plugins" : [  ],
-	"ignore_files" :  [ "jpg", "png", "jpeg", "ico", "gif", "tif" , "tiff", "bmp" ] 
+	"ignore_files" :  [ "jpg", "png", "jpeg", "ico", "gif", "tif" , "tiff", "bmp",  "db", "css", "map", "md", "gitkeep", "sql", "DS_Store", "js", "propreties" , "csv", "gz", "tgz", "zip", "swf", "pyc", "phar" ] 
 	"ignore_dirs" : ["node_modules"] 
 }
 
