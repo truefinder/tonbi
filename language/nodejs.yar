@@ -1,4 +1,4 @@
-rule cmd_excute
+rule cmd_excute : nodejs 
 {
     strings:
         $cmd1 = "exec("
@@ -12,7 +12,7 @@ rule cmd_excute
         any of them 
 }
 
-rule file_temper
+rule file_temper: nodejs 
 {
     strings: 
         $file1 = ".IncomingForm("
@@ -31,7 +31,7 @@ rule file_temper
         (any of them) and not ("JSON" and $file2)
 }
 
-rule sql_injection1_mysql 
+rule sql_injection1_mysql : nodejs 
 {
     strings : 
         $sql1 = "createConnection("
@@ -41,7 +41,7 @@ rule sql_injection1_mysql
         any of them 
 }
 
-rule sql_injection1_mongodb 
+rule sql_injection1_mongodb : nodejs 
 {
     strings : 
 
@@ -60,7 +60,7 @@ rule sql_injection1_mongodb
         ($sql3 and 1 of ($sub*))        
 }
 
-rule sql_injection2 
+rule sql_injection2 : nodejs 
 {
     strings : 
         
@@ -77,7 +77,7 @@ rule sql_injection2
 }
 
 
-rule sql_injection3 
+rule sql_injection3 : nodejs 
 {
     strings : 
         $sql1 = /select.*from/ nocase 
@@ -89,7 +89,7 @@ rule sql_injection3
        1 of ($sql*) and $param 
 }
 
-rule js_excute 
+rule js_excute : nodejs 
 {
     strings : 
         $eval1 = "$eval(" 
@@ -100,7 +100,7 @@ rule js_excute
         any of them 
 
 }
-rule xss 
+rule xss : nodejs 
 {
     strings : 
        
@@ -113,7 +113,7 @@ rule xss
         1 of ($xss*) and $eql 
 }
 
-rule ssl 
+rule ssl : nodejs 
 {
     strings : 
         $true = /.*:.*true/ nocase 
@@ -131,7 +131,7 @@ rule ssl
         ( $ssl5 ) 
 }
 
-rule ssi 
+rule ssi : nodejs 
 {
     strings : 
         $qoute1 = /<%.*%>/
@@ -139,52 +139,10 @@ rule ssi
         $qoute1 
 }
 
-rule cookie 
+rule cookie : nodejs 
 {
     strings :
         $cookie = /document.cookie.*=/
     condition : 
         $cookie 
 }
-
-rule electron_setting1 
-{
-    strings :
-        $fg1 = "nodeIntegration"
-        $fg2 = "nodeIntegrationInWorker"
-        $fg3 = "nodeIntegrationInSubFrames" 
-        $fg4 = "allowRunningInsecureContent"
-        $fg5 = "enableRemoteModule"
-        $fg6 = "nativeWindowOpen"
-        $fg7 = "webviewTag"
-
-        $tg1 = "contextIsolation"
-        $tg2 = "safeDialogs"
-        $tg3 = "sandbox"
-        $tg4 = "webSecurity"
-
-        $pre = /preload.*:/
-
-        $true = /.*:.*true/
-        $false = /.*:.*false/ 
-
-    condition: 
-        (1 of ($fg*) and $true) or 
-        (1 of ($tg*) and $false) or 
-        $pre
-
-}
-
-rule electron_setting3 
-{
-    strings : 
-        $set1 = "devTools"
-        $set2 = "BrowserWindow.webContents.openDevTools("
-        $set3 = "enableWebSQL"
-        $set4 = "openExternal("
-        $set5 = "ELECTRON_RUN_AS_NODE"
-    condition: 
-        any of them 
-        
-}
-

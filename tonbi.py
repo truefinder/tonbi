@@ -39,6 +39,7 @@ class Config :
 	source_directory = ""
 	platform_name = ""
 	template_name = "" 
+	language = ""
 	head_count = DEFAULT_LINES 
 	tail_count = DEFAULT_LINES 
 	output = ""
@@ -65,11 +66,11 @@ class Kbdb :
 	dic = "" 
 
 class Yara : 
-	rules = "" 
+	platform_rules = "" 
+	language_rules = ""
 
 class Output :
 	list = [] 
-
 
 class AuditItem:
 	output = ""
@@ -104,6 +105,7 @@ def load_config():
 		# TODO set config dic 
 		config.source_directory = config_dic["source_directory"] 
 		config.platform_name = config_dic["platform_name"] 
+		config.language = config_dic["language"]
 		config.head_count = config_dic["head_count"] 
 		config.tail_count = config_dic["tail_count"] 
 		config.ignore_files = config_dic["ignore_files"]
@@ -135,8 +137,15 @@ def yara_load_platform() :
 	print ("load platform ..." )
 	filename = "./platform/" + config.platform_name + "." + YARA_EXT
 	with open( filename  ) as f : 
-		myyara.rules = yara.compile(filepath=filename)
-		debug_print(myyara.rules) 
+		myyara.platform_rules = yara.compile(filepath=filename)
+		debug_print(myyara.platform_rules) 
+
+def yara_load_language() :
+	print ("load language ..." )
+	filename = "./language/" + config.language + "." + YARA_EXT
+	with open( filename  ) as f : 
+		myyara.language_rules = yara.compile(filepath=filename)
+		debug_print(myyara.language_rules) 
 
 
 def kbdb_add_vulnerability(filename, lines, item, match):
@@ -164,7 +173,7 @@ def yara_add_vulnerability(filename, lines, match):
 	vulnerability += "matches : " + pattern + "\n" 
 	if (config.debug_mode):
 		vulnerability += "vulnerability : " + match[0] + "\n"  
-	if (match.tags[0]):
+	if match.tags: 
 		vulnerability += "tag : " + match.tags[0] + "\n" 
 	vulnerability += "=================================================\n" 
 	vulnerability += lines + "\n"
@@ -195,22 +204,26 @@ def import_path(path):
 
 
 def load_plugin() : 
-	print ("load plugin ..." )
+	print ("load plugins ..." )
 	
 	# python 3.5~ 
-	for p in config.plugins :
-		plugin_filename = "./plugin/" + p + "/" + p + ".py"
-		plugin.dic[p] = import_path(plugin_filename)
-	
-		# myplugin = plugin.dic["myplugin"].MyPlugin()
-		# myplugin.init() 
-		plugin.objs[p] = plugin.dic[p].MyPlugin() # class MyPlugin() 
-		plugin.objs[p].init() # MyPlugin.init()		
+	if config.plugins : 
+		for p in config.plugins :
+			if p : 
+				plugin_filename = "./plugin/" + p + "/" + p + ".py"
+				plugin.dic[p] = import_path(plugin_filename)
+			
+				# myplugin = plugin.dic["myplugin"].MyPlugin()
+				# myplugin.init() 
+				plugin.objs[p] = plugin.dic[p].MyPlugin() # class MyPlugin() 
+				plugin.objs[p].init() # MyPlugin.init()		
 
 
 def unload_plugin():
-	for p in config.plugins :
-		plugin.objs[p].finish() # MyPlugin.finish()	
+	if config.plugins : 
+		for p in config.plugins :
+			if p : 
+				plugin.objs[p].finish() # MyPlugin.finish()	
 
 
 def start_audit() : 
@@ -331,19 +344,29 @@ def yara_audit( filename) :
 					print("failed to analysis : one line is too long ... ")
 					continue 
 				
-				#1. general platform yara search
-				matches = myyara.rules.match(data=line)
+				#1. platform yara search
+				matches = myyara.platform_rules.match(data=line)
 				if matches:
 					lines = scrap_lines(line, datafile,i)
 					yara_add_vulnerability(filename, lines, matches[0]) 
 					lines = ""
-				#2. plugin search 
-				for p in config.plugins :
-					audititem.lines = scrap_lines(line, datafile,i)
-					audititem.line = line 
-					audititem.i = i 
-					
-					plugin.objs[p].audit(audititem) # MyPlugin.audit()	
+
+				#1. language  yara search
+				matches = myyara.language_rules.match(data=line)
+				if matches:
+					lines = scrap_lines(line, datafile,i)
+					yara_add_vulnerability(filename, lines, matches[0]) 
+					lines = ""
+				
+				#3. plugin search 
+				if config.plugins : 
+					for p in config.plugins :
+						if p : 
+							audititem.lines = scrap_lines(line, datafile,i)
+							audititem.line = line 
+							audititem.i = i 
+							
+							plugin.objs[p].audit(audititem) # MyPlugin.audit()	
 					
 				i = i+1 
 	except IOError:
@@ -383,6 +406,7 @@ def main():
 	parser.add_option("-d", "--directory", dest="directory", metavar="DIR", help="source code directory")
 	parser.add_option("-p", "--platform", dest="platform", metavar="PLATFORM", help="platform name ex) laravel ")
 	parser.add_option("-t", "--template", dest="template", metavar="TEMPLATE", help="template name ex) twig")
+	parser.add_option("-l", "--language", dest="language", metavar="LANGUAGE", help="language name ex) php")
 	parser.add_option("--head",  type="int", dest="head", help="show previous <num> lines")
 	parser.add_option("--tail",  type="int", dest="tail", help="show below <num> lines")
 	parser.add_option("-D", "--debug", dest="debug", help="verbose mode", action="store_true")
@@ -408,6 +432,12 @@ def main():
 		else :
 				parser.error("app platform name not defined")  
 
+		
+		if (options.language):
+				config.language = options.language 
+		else :
+				parser.error("app language name not defined")  
+
 		if (options.template):
 				config.template_name = options.template 
 
@@ -425,6 +455,8 @@ def main():
 
 	#kbdb_load_platform()
 	yara_load_platform() 
+
+	yara_load_language()
 
 	load_plugin() 
 

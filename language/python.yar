@@ -1,4 +1,4 @@
-rule cmd_excute_python3_shellspawn
+rule cmd_excute_python3_shellspawn : python 
 {
     strings:
         $cmd1 = "run("
@@ -16,7 +16,7 @@ rule cmd_excute_python3_shellspawn
 
 }
 
-rule cmd_excute_python3_nospawn 
+rule cmd_excute_python3_nospawn  : python 
 {
     strings:
         // subprocess 
@@ -84,7 +84,7 @@ rule file_temper
         any of them 
 }
 
-rule code_injection 
+rule code_injection  : python 
 {
     strings : 
         $eval1 = "eval(" 
@@ -95,7 +95,7 @@ rule code_injection
 }
 
 
-rule sql_injection1
+rule sql_injection1 : python 
 {
     strings : 
         $sql1 = "query("
@@ -105,7 +105,7 @@ rule sql_injection1
         any of them 
 }
 
-rule sql_injection2 
+rule sql_injection2  : python 
 {
     strings : 
         
@@ -123,7 +123,7 @@ rule sql_injection2
 
 
 
-rule sql_injection3 
+rule sql_injection3  : python 
 {
     strings : 
         $sql1 = /select.*from/ nocase 
@@ -135,7 +135,7 @@ rule sql_injection3
        1 of ($sql*) and $param 
 }
 
-rule crypto 
+rule crypto  : python 
 {
     strings : 
         $crypt1 = /AES\.new\(.*AES\.(MODE_ECB|MODE_ECB)/
@@ -143,7 +143,7 @@ rule crypto
         any of them 
 }
 
-rule jwt 
+rule jwt  : python 
 {
     strings:
         $jwt1 = /jwt\.decode\(.*false/ nocase 
@@ -153,7 +153,7 @@ rule jwt
 }
 
 
-rule ldap
+rule ldap : python 
 {
     strings :
         $ldap1 = /connect.*bind.*root/ 
@@ -161,7 +161,7 @@ rule ldap
         any of them 
 }
 
-rule ssl_method 
+rule ssl_method  : python 
 {
     strings : 
         $ssl1 = /ssl.*context.*SSLv3/
@@ -170,7 +170,7 @@ rule ssl_method
 }
 
 
-rule xss2 
+rule xss2  : python 
 {
     strings : 
         $auto = /Environment.*autoescape.*False/ nocase 

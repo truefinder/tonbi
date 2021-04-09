@@ -1,4 +1,4 @@
-rule sql_injection 
+rule sql_injection : go 
 {
     strings : 
         $sql1 ="Raw("
@@ -23,7 +23,7 @@ rule sql_injection
         1 of ($sql*) and ( $op1 or $op2 )
 }
 
-rule sql_injection2 
+rule sql_injection2 : go 
 {
    strings : 
         
@@ -38,7 +38,7 @@ rule sql_injection2
        1 of ($sql*) and $param 
 }
 
-rule sql_injection3 
+rule sql_injection3 : go 
 {
     strings : 
         $sql1 = /select.*from/ nocase 
@@ -50,7 +50,7 @@ rule sql_injection3
        1 of ($sql*) and $param 
 }
 
-rule cmd_excute
+rule cmd_excute: go 
 {
     strings : 
         $cmd1 = "exec.Command("
@@ -60,7 +60,7 @@ rule cmd_excute
         any of them 
 }
 
-rule xss
+rule xss: go 
 {
     strings :
         $xss1 = "URL.Query("
@@ -72,7 +72,7 @@ rule xss
         any of them
 }
 
-rule file_temper 
+rule file_temper : go 
 {
     strings : 
         $file1 = "Clean{"
@@ -83,7 +83,7 @@ rule file_temper
         any of them 
 }
 
-rule ssl 
+rule ssl : go 
 {
     strings : 
         $ssl1 = "InsecureSkipVerify." 

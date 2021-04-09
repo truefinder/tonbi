@@ -12,7 +12,7 @@ rule redirect : django
 rule xss : django
 {
     strings:
-        $xss1 = /__setitem__(.*Content-Type/
+        $xss1 = /__setitem__\(.*Content-Type/
     condition:
        any of them  
 }

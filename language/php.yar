@@ -1,4 +1,4 @@
-rule cmd_excute
+rule cmd_excute : php
 {
     strings:
         $cmd1 = "exec("
@@ -20,7 +20,7 @@ rule cmd_excute
         any of them 
 }
 
-rule sql_injection1
+rule sql_injection1: php
 {
     strings : 
         $sql1 = "mysql_query("
@@ -29,7 +29,7 @@ rule sql_injection1
     condition : 
         any of them
 }
-rule sql_injection2 
+rule sql_injection2 : php
 {
     strings : 
         
@@ -46,7 +46,7 @@ rule sql_injection2
     
 }
 
-rule sql_injection3 
+rule sql_injection3 : php
 {
     strings : 
         $sql1 = /select.*from/ nocase 
@@ -59,7 +59,7 @@ rule sql_injection3
 }
 
 
-rule xss 
+rule xss : php
 {
     strings : 
         $xss1 = "echo("
@@ -69,7 +69,7 @@ rule xss
 }
 
 
-rule hash 
+rule hash : php
 {
     strings :
         $hash1 = "hash("
