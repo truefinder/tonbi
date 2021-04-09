@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from optparse import OptionParser
 import os
 import json 
@@ -5,6 +7,13 @@ import re
 import importlib
 import yara 
 
+import os
+
+#relative path
+tonbi_dir = os.path.dirname(__file__)
+platform_dir = os.path.join(tonbi_dir, 'platform')
+language_dir = os.path.join(tonbi_dir, 'language')
+plugin_dir = os.path.join(tonbi_dir, 'plugin')
 
 #default 3+3, 6lines will show you
 DEFAULT_LINES = 3 
@@ -135,14 +144,16 @@ def kbdb_load_platform() :
   
 def yara_load_platform() :
 	print ("load platform ..." )
-	filename = "./platform/" + config.platform_name + "." + YARA_EXT
+	rulefile = config.platform_name + "." + YARA_EXT
+	filename = os.path.join(platform_dir, rulefile)
 	with open( filename  ) as f : 
 		myyara.platform_rules = yara.compile(filepath=filename)
 		debug_print(myyara.platform_rules) 
 
 def yara_load_language() :
 	print ("load language ..." )
-	filename = "./language/" + config.language + "." + YARA_EXT
+	rulefile = config.language + "." + YARA_EXT
+	filename = os.path.join(language_dir, rulefile)
 	with open( filename  ) as f : 
 		myyara.language_rules = yara.compile(filepath=filename)
 		debug_print(myyara.language_rules) 
@@ -210,7 +221,9 @@ def load_plugin() :
 	if config.plugins : 
 		for p in config.plugins :
 			if p : 
-				plugin_filename = "./plugin/" + p + "/" + p + ".py"
+				pluginfile = p + ".py"
+				plugindir = os.path.join(plugin_dir, p)
+				plugin_filename = os.path.join(plugindir, pluginfile)
 				plugin.dic[p] = import_path(plugin_filename)
 			
 				# myplugin = plugin.dic["myplugin"].MyPlugin()
@@ -382,7 +395,7 @@ def walk_around(dirname):
 			dirs[:] = [d for d in dirs if d not in config.ignore_dirs]
 
 		for filename in files:
-			full_filename = path + "/" + filename 
+			full_filename = os.path.join(path, filename) 
 			(base, ext ) = os.path.splitext( full_filename ) 
 			if(config.ignore_files):
 				exclude_exts = config.ignore_files 
