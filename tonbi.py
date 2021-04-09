@@ -8,6 +8,8 @@ import yara
 
 #default 3+3, 6lines will show you
 DEFAULT_LINES = 3 
+#one line can't limit 500 ascii characters
+LIMIT_LINE_LEN = 1024 
 #basic ignore image files 
 DEFAULT_IGNORE = [ "jpg", "png", "jpeg", "ico", "gif", "tif" , "tiff", "bmp" ] 
 #default knowledge based database file 
@@ -324,6 +326,11 @@ def yara_audit( filename) :
 			AuditItem.filename = filename 
 			
 			for line in datafile :
+				#0. give up when its length is over 500 characters cause cpu goes bust
+				if (len(line) > LIMIT_LINE_LEN ):
+					print("failed to analysis : one line is too long ... ")
+					continue 
+				
 				#1. general platform yara search
 				matches = myyara.rules.match(data=line)
 				if matches:
