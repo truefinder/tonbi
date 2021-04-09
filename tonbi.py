@@ -173,7 +173,12 @@ def kbdb_add_vulnerability(filename, lines, item, match):
 	output.list.append(vulnerability)
 
 
-def yara_add_vulnerability(filename, lines, match):
+def yara_add_vulnerability(filename, lines, matches):
+	if (type(matches) is list ): # maches returns list  
+		match = matches[0]
+	else:
+		match = matches 
+
 	length, variable, m_string = match.strings[0]
 	pattern = str(m_string, 'utf-8')
 
@@ -183,7 +188,7 @@ def yara_add_vulnerability(filename, lines, match):
 	vulnerability += "vulnerability : " +  match.rule + "\n"  
 	vulnerability += "matches : " + pattern + "\n" 
 	if (config.debug_mode):
-		vulnerability += "vulnerability : " + match[0] + "\n"  
+		vulnerability += "vulnerability : " + match.rule + "\n"  
 	if match.tags: 
 		vulnerability += "tag : " + match.tags[0] + "\n" 
 	vulnerability += "=================================================\n" 
@@ -361,14 +366,14 @@ def yara_audit( filename) :
 				matches = myyara.platform_rules.match(data=line)
 				if matches:
 					lines = scrap_lines(line, datafile,i)
-					yara_add_vulnerability(filename, lines, matches[0]) 
+					yara_add_vulnerability(filename, lines, matches) 
 					lines = ""
 
 				#1. language  yara search
 				matches = myyara.language_rules.match(data=line)
 				if matches:
 					lines = scrap_lines(line, datafile,i)
-					yara_add_vulnerability(filename, lines, matches[0]) 
+					yara_add_vulnerability(filename, lines, matches) 
 					lines = ""
 				
 				#3. plugin search 
