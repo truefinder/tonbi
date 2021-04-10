@@ -76,10 +76,10 @@ $python tonbi.py -c config.json
 * Electron
 
 ## Viewes 
-Smarty
-Twig 
-Blade 
-Flexy
+* Smarty
+* Twig 
+* Blade 
+* Flexy
 
 ## Languages
 * php 
