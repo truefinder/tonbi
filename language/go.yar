@@ -1,5 +1,6 @@
 /* dangerous functions */ 
 include "sql.yar" 
+include "sh.yar" 
 
 rule sql_injection : go 
 {

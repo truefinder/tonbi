@@ -1,6 +1,6 @@
 /* dangerous functions */ 
 include "sql.yar" 
-
+include "sh.yar" 
 
 rule cmd_excute : nodejs 
 {
