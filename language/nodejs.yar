@@ -1,3 +1,7 @@
+/* dangerous functions */ 
+include "sql.yar" 
+
+
 rule cmd_excute : nodejs 
 {
     strings:
@@ -60,34 +64,6 @@ rule sql_injection1_mongodb : nodejs
         ($sql3 and 1 of ($sub*))        
 }
 
-rule sql_injection2 : nodejs 
-{
-    strings : 
-        
-        $sql1 = "raw" nocase 
-        $sql2 = "query" nocase 
-        $sql3 = "sql" nocase
-        $sql4 = "fmt" nocase 
-        $sql5 = "stmt" nocase 
-        $sql6 = "statement" nocase 
-        $param = /.*=.*%s/ nocase 
-        
-    condition : 
-       1 of ($sql*) and $param 
-}
-
-
-rule sql_injection3 : nodejs 
-{
-    strings : 
-        $sql1 = /select.*from/ nocase 
-        $sql2 = /update.*set/ nocase
-        $sql3 = /insert.*into/ nocase 
-        $sql4 = /delete.*from/ nocase
-        $param = /.*(%s|\+)/ nocase 
-    condition:
-       1 of ($sql*) and $param 
-}
 
 rule js_excute : nodejs 
 {

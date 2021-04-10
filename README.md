@@ -35,7 +35,7 @@ $python tonbi.py -d ./source_dir -p your_platform -l language
 -d <source> top source code directory
 -p <paltform> server-side platform name
 -l <language> source code language    
--t <template> view template name
+-v <view> render template name
 -head <n> display haed n line
 -tail <n> display tail n line 
 -o <output> save result into text file
@@ -52,9 +52,9 @@ create config.json like below
 	"source_directory" : "../sample/codeigniter/src",
 	"platform_name" : "codeigniter",
 	"language" : "php", 
+	"view_name" : "twig",
 	"head_count" : 5,
 	"tail_count" : 5,
-	"template_name" : "",
 	"output" : "output.txt",
 	"plugins" : [  ],
 	"ignore_files" :  [ "jpg", "png", "jpeg", "ico", "gif", "tif" , "tiff", "bmp",  "db", "css", "map", "md", "gitkeep", "sql", "DS_Store", "js", "propreties" , "csv", "gz", "tgz", "zip", "swf", "pyc", "phar" ] 
@@ -66,7 +66,7 @@ And run tonbi
 $python tonbi.py -c config.json 
 ```
 
-## Platforms & Templates
+## Frameworks 
 * Laravel 
 * Codeigniter
 * Django
@@ -75,7 +75,13 @@ $python tonbi.py -c config.json
 * Gorilla
 * Electron
 
-## Language 
+## Viewes 
+Smarty
+Twig 
+Blade 
+Flexy
+
+## Languages
 * php 
 * python
 * go
@@ -83,7 +89,7 @@ $python tonbi.py -c config.json
 
 ## Update Plans 
 * PHP
-    - symfony, cakephp, fuelphp, phalcon, silex, yii, ethna, 
+    - symfony, cakephp, fuelphp, phalcon, silex, yii
 * Python 
     - kivy, bottle
 * Ruby
@@ -139,6 +145,7 @@ class MyPlugin :
 filename : ../targets/laravel/XXXX-Server/app/Libs/ImageMagic/Convert.php
 dangerous php function : cmd_excute
 dangerous matches : exec(
+tag : php
 ==============================================
 35:      * @return int
 36:      */

@@ -13,6 +13,7 @@ import os
 tonbi_dir = os.path.dirname(__file__)
 platform_dir = os.path.join(tonbi_dir, 'platform')
 language_dir = os.path.join(tonbi_dir, 'language')
+view_dir = os.path.join(tonbi_dir, 'view')
 plugin_dir = os.path.join(tonbi_dir, 'plugin')
 
 #default 3+3, 6lines will show you
@@ -47,7 +48,7 @@ class Config :
 	config_file =""
 	source_directory = ""
 	platform_name = ""
-	template_name = "" 
+	view_name = "" 
 	language = ""
 	head_count = DEFAULT_LINES 
 	tail_count = DEFAULT_LINES 
@@ -77,6 +78,7 @@ class Kbdb :
 class Yara : 
 	platform_rules = "" 
 	language_rules = ""
+	view_rules = "" 
 
 class Output :
 	list = [] 
@@ -119,8 +121,8 @@ def load_config():
 		config.tail_count = config_dic["tail_count"] 
 		config.ignore_files = config_dic["ignore_files"]
 
-		if(config_dic["template_name"]) :
-			config.template_name = config_dic["template_name"] 
+		if(config_dic["view_name"]) :
+			config.view_name = config_dic["view_name"] 
 
 		if(config_dic["output"]):
 			config.output = config_dic["output"] 
@@ -157,6 +159,17 @@ def yara_load_language() :
 	with open( filename  ) as f : 
 		myyara.language_rules = yara.compile(filepath=filename)
 		debug_print(myyara.language_rules) 
+
+def yara_load_view() :
+	if config.view_name == "" :
+		return 
+		
+	print ("load view ..." )
+	rulefile = config.view_name + "." + YARA_EXT
+	filename = os.path.join(view_dir, rulefile)
+	with open( filename  ) as f : 
+		myyara.view_rules = yara.compile(filepath=filename)
+		debug_print(myyara.view_rules) 
 
 
 def kbdb_add_vulnerability(filename, lines, item, match):
@@ -346,7 +359,7 @@ def kbdb_audit( filename) :
 
 
 def yara_audit( filename) :
-	print("audit file with yara : " + filename ) 
+	print("[%s][%s][%s] : " %(config.language, config.platform_name, config.view_name) + filename ) 
 	try: 
 		with open( filename, errors='replace' ) as f :
 			i = 0
@@ -369,12 +382,20 @@ def yara_audit( filename) :
 					yara_add_vulnerability(filename, lines, matches) 
 					lines = ""
 
-				#1. language  yara search
+				#2. language  yara search
 				matches = myyara.language_rules.match(data=line)
 				if matches:
 					lines = scrap_lines(line, datafile,i)
 					yara_add_vulnerability(filename, lines, matches) 
 					lines = ""
+
+				#3. view  yara search
+				if config.view_name != "" :
+					matches = myyara.view_rules.match(data=line)
+					if matches:
+						lines = scrap_lines(line, datafile,i)
+						yara_add_vulnerability(filename, lines, matches) 
+						lines = ""
 				
 				#3. plugin search 
 				if config.plugins : 
@@ -423,7 +444,7 @@ def main():
 	parser.add_option("-c", "--config", dest="config", metavar="CONFIG", help="use config file config.json")
 	parser.add_option("-d", "--directory", dest="directory", metavar="DIR", help="source code directory")
 	parser.add_option("-p", "--platform", dest="platform", metavar="PLATFORM", help="platform name ex) laravel ")
-	parser.add_option("-t", "--template", dest="template", metavar="TEMPLATE", help="template name ex) twig")
+	parser.add_option("-v", "--view", dest="view", metavar="VIEW", help="view name ex) smarty")
 	parser.add_option("-l", "--language", dest="language", metavar="LANGUAGE", help="language name ex) php")
 	parser.add_option("--head",  type="int", dest="head", help="show previous <num> lines")
 	parser.add_option("--tail",  type="int", dest="tail", help="show below <num> lines")
@@ -450,14 +471,13 @@ def main():
 		else :
 				parser.error("app platform name not defined")  
 
-		
 		if (options.language):
 				config.language = options.language 
 		else :
 				parser.error("app language name not defined")  
 
-		if (options.template):
-				config.template_name = options.template 
+		if (options.view):
+				config.view_name = options.view 
 
 		if (options.output):
 				config.output = options.output 
@@ -475,6 +495,8 @@ def main():
 	yara_load_platform() 
 
 	yara_load_language()
+
+	yara_load_view() 
 
 	load_plugin() 
 

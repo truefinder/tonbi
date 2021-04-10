@@ -1,3 +1,6 @@
+/* dangerous functions */ 
+include "sql.yar" 
+
 rule cmd_excute_python3_shellspawn : python 
 {
     strings:
@@ -105,35 +108,6 @@ rule sql_injection1 : python
         any of them 
 }
 
-rule sql_injection2  : python 
-{
-    strings : 
-        
-        $sql1 = "raw" nocase 
-        $sql2 = "query" nocase 
-        $sql3 = "sql" nocase
-        $sql4 = "fmt" nocase 
-        $sql5 = "stmt" nocase 
-        $sql6 = "statement" nocase 
-        $param = /.*=.*%s/ nocase 
-        
-    condition : 
-       1 of ($sql*) and $param 
-}
-
-
-
-rule sql_injection3  : python 
-{
-    strings : 
-        $sql1 = /select.*from/ nocase 
-        $sql2 = /update.*set/ nocase
-        $sql3 = /insert.*into/ nocase 
-        $sql4 = /delete.*from/ nocase
-        $param = /.*(%s|\+)/ nocase 
-    condition:
-       1 of ($sql*) and $param 
-}
 
 rule crypto  : python 
 {

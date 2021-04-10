@@ -1,3 +1,6 @@
+/* dangerous functions */ 
+include "sql.yar" 
+
 rule sql_injection : go 
 {
     strings : 
@@ -23,32 +26,6 @@ rule sql_injection : go
         1 of ($sql*) and ( $op1 or $op2 )
 }
 
-rule sql_injection2 : go 
-{
-   strings : 
-        
-        $sql1 = "raw" nocase 
-        $sql2 = "query" nocase 
-        $sql3 = "sql" nocase
-        $sql5 = "stmt" nocase 
-        $sql6 = "statement" nocase 
-        $param = /.*=.*%s/ nocase 
-        
-    condition : 
-       1 of ($sql*) and $param 
-}
-
-rule sql_injection3 : go 
-{
-    strings : 
-        $sql1 = /select.*from/ nocase 
-        $sql2 = /update.*set/ nocase
-        $sql3 = /insert.*into/ nocase 
-        $sql4 = /delete.*from/ nocase
-        $param = /.*(%s|\+)/ nocase 
-    condition:
-       1 of ($sql*) and $param 
-}
 
 rule cmd_excute: go 
 {
