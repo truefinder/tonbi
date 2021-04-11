@@ -2,21 +2,21 @@
 include "sql.yar" 
 include "sh.yar" 
 
+/* dangerous functions */ 
+
+
 rule cmd_excute_python3_shellspawn : python 
 {
     strings:
-        $cmd1 = "run("
-        $cmd2 = "Popen("
-        $cmd3 = "call("
-        $cmd4 = "check_call("
-        $cmd5 = "check_output(" 
-
-        $opt1 = "shell=True" nocase 
-        $sys1 = "system("
+        $cmd1 = /run\(.*shell=True/
+        $cmd2 = /Popen\(.*shell=True/
+        $cmd3 = /call\(.*shell=True/
+        $cmd4 = /check_call\(.*shell=True/
+        $cmd5 = /check_output\(.*shell=True/ 
+        $cmd6 = /^system\(/
          
     condition:
-        ((1 of ($cmd*)) and $opt1 ) or 
-        $sys1 
+        any of them 
 
 }
 
@@ -24,47 +24,28 @@ rule cmd_excute_python3_nospawn  : python
 {
     strings:
         // subprocess 
-        $cmd1 = "run("
-        $cmd2 = "Popen("
-        $cmd3 = "call("
-        $cmd4 = "check_call("
-        $cmd5 = "check_output("
+        $cmd1 = /subprocess\.(run|Popen|call|check_call|check_output)\(/
+        
+        // os.spawn 
+        $cmd2 = /os\.spawn.*\(/
+       
+        // os.exec 
+        $cmd3 = /os\.exec.*\(/
 
-        // spawn 
-        $cmd6 = "spawnl("
-        $cmd7 = "spawnle("
-        $cmd8 = "spawnlp("
-        $cmd9 = "spawnlpe("
-        $cmd10 = "spawnv("
-        $cmd11 = "spawnve("
-        $cmd12 = "spawnvp("
-        $cmd13 = "spawnvpe("
+        // commands 
+        $cmd4 = /commands\.get.*\(/
 
-        // exec 
-        $cmd14 = "popen("
-        $cmd15 = "getstatusoutput("
-        $cmd16 = "getoutput("
-        $cmd17 = "startfile("
-        $cmd18 = "execl("
-        $cmd19 = "execle("
-        $cmd20 = "execlp("
-        $cmd21 = "execlpe("
-        $cmd22 = "execv("
-        $cmd23 = "execve("
-        $cmd24 = "execvp("
-        $cmd25 = "execvpe("
+        $cmd5 = /os\.(popen|startfile)\(/
+      
     condition: 
-        all of them 
-
+        any of them 
 }
 
 rule cmd_excute_python2
 {
     strings:
-        $cmd1 = "popen2("
-        $cmd2 = "popen3("
-        $cmd3 = "popen4("      
-         
+        $cmd1 = /os\.popen[2-4]\(/
+      
     condition:
         any of them 
 }
@@ -73,17 +54,17 @@ rule file_temper
 {
     strings: 
         $file1 = ".NamedTemporaryFile("
-        $file2 = "tempfile.mktemp()"
+        $file2 = /^tempfile.mktemp\(/
         $file3 = "umask(0)"
-        $file4 = "chmod("
-        $file5 = "lchmod("
-        $file6 = "fchmod("
-        $file7 = "chown("
-        $file8 = "rename("
-        $file9 = "remove("
-        $file10 = "extractall("
-        $file11 = "link("
-        $file12 = "unlink("
+        $file4 = /^chmod\(/
+        $file5 = /^lchmod\(/
+        $file6 = /^fchmod\(/
+        $file7 = /^chown\(/
+        $file8 = /^rename\(/
+        $file9 = /^remove\(/
+        $file10 = ".extractall("
+        $file11 = /^link\(/
+        $file12 = /^unlink\(/
     condition : 
         any of them 
 }
@@ -91,7 +72,7 @@ rule file_temper
 rule code_injection  : python 
 {
     strings : 
-        $eval1 = "eval(" 
+        $eval1 = /^eval\(/ 
        
     condition : 
         any of them 
@@ -102,8 +83,8 @@ rule code_injection  : python
 rule sql_injection1 : python 
 {
     strings : 
-        $sql1 = "query("
-        $sql2 = "execute("
+        $sql1 = ".query("
+        $sql2 = "cursor.execute("
 
     condition : 
         any of them 
