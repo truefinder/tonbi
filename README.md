@@ -73,13 +73,14 @@ $python tonbi.py -c config.json
 * Flask
 * Typescript 
 * Gorilla
-* Electron
+* Ethna
 
 ## Viewes 
 * Smarty
 * Twig 
 * Blade 
 * Flexy
+* Electron
 
 ## Languages
 * php 
@@ -89,27 +90,28 @@ $python tonbi.py -c config.json
 
 ## Update Plans 
 * PHP
-    - symfony, cakephp, fuelphp, phalcon, silex, yii
+    - Symfony, CakePHP, Fuelphp, Phalcon, Silex, Yii
 * Python 
-    - kivy, bottle
+    - Kivy, Bottle
 * Ruby
-    - rails 
+    - Rails 
 * Javascript 
-    - scala 
+    - Scala 
 
-## Add your own foundings to tonbi
+## Add your own foundings to platform
 ```
-touch platform/some_platform.yar 
-cat > platform/some_platform.yar
-/* some_platform vulnerable code audting rule */  
-{
-rule code_injection : some_platform 
+vi  platform/<platform_name>.yar
+/* please confer yara rule page  
+ * https://yara.readthedocs.io/en/stable/writingrules.html
+ */  
+
+rule my_xss : <platform_name>  
 {
     strings : 
-        $code1 = "exec(" 
-        $code2 = /yml\.load\(.*yaml\.Loader/
+        $xss1 = /render(.*false/ 
+        $xss2 = /autoescape.*false/ nocase 
     condition:
-        $code1 or $code2 
+        $xss1 or $xss2 
 }
 ```
 
