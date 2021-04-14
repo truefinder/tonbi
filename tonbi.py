@@ -477,7 +477,7 @@ def main():
 	group = OptionGroup(parser, "Output Options")
 	
 	group.add_option("-o", "--output", dest="output", help="save result into file ex) -o output.txt")
-	group.add_option("-e", "--exclude", dest="exclude", action='append', default=[], help="exclude some vulnerability ex) -e 'sql_injection'" ) 
+	group.add_option("-e", "--exclude", dest="exclude", action='append', default=[], help="exclude some vulnerability ex) -e 'ssl_misconfiguration'" ) 
 	group.add_option("--head",  type="int", dest="head", help="show above lines ex) --head 5")
 	group.add_option("--tail",  type="int", dest="tail", help="show below lines ex) --tail 5")
 	parser.add_option_group(group)

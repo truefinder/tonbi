@@ -50,7 +50,7 @@ Options:
     -o OUTPUT, --output=OUTPUT
                         save result into file ex) -o output.txt
     -e EXCLUDE, --exclude=EXCLUDE
-                        exclude some vulnerability ex) -e 'sql_injection'
+                        exclude some vulnerability ex) -e 'ssl_misconfiguration'
     --head=HEAD         show above lines ex) --head 5
     --tail=TAIL         show below lines ex) --tail 5
 
