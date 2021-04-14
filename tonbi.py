@@ -1,13 +1,16 @@
 #!/usr/bin/python3
 
 from optparse import OptionParser
+from optparse import OptionGroup
 import os
 import json 
 import re
 import importlib
 import yara 
-
 import os
+import logging, sys
+
+logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
 #relative path
 tonbi_dir = os.path.dirname(__file__)
@@ -26,6 +29,8 @@ DEFAULT_IGNORE = [ "jpg", "png", "jpeg", "ico", "gif", "tif" , "tiff", "bmp" ]
 KBDB_FILE = "kbdb.json"
 YARA_EXT = "yar"
 
+
+
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -37,14 +42,14 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
-
+# debug_print() will be deprecated 
 def debug_print(str):
 	if config.debug_mode : 
-		print( str) 
+		print('DEBUG: ', str) 
 
 
 class Config : 
-	debug_mode = 0 
+	debug_mode = False 
 	config_file =""
 	source_directory = ""
 	platform_name = ""
@@ -56,6 +61,7 @@ class Config :
 	plugins = []
 	ignore_files = [] 
 	ignore_dirs = [] 
+	exclude = [] 
 
 
 class Plugin:
@@ -98,6 +104,17 @@ output = Output()
 myyara = Yara() 
 
 
+# create logger
+logger = logging.getLogger('tonbi')
+logger.setLevel(logging.WARNING)
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+ch.setFormatter(formatter)
+logger.addHandler(ch)
+#logger.debug('debug message')
+
+
 def prepare_output():
 	if(config.output):
 		if( os.path.exists( config.output)):
@@ -105,14 +122,16 @@ def prepare_output():
 
 
 def check_config():
-    print("check configuration") 
+	print("check configuration...")
+	
 
 
 def load_config():
 	print("load config setting ")
 	with open ( config.config_file ) as f:
 		config_dic = json.load(f)
-		debug_print(config_dic) 
+		logger.debug('config_dic(json): %r', config_dic) 
+		
 		# TODO set config dic 
 		config.source_directory = config_dic["source_directory"] 
 		config.platform_name = config_dic["platform_name"] 
@@ -133,7 +152,10 @@ def load_config():
 		if(config_dic["ignore_dirs"]):
 			config.ignore_dirs = config_dic["ignore_dirs"]
 
-	debug_print("config_dic")
+		if(config_dic["exclude"]):
+			config.exclude = config_dic["exclude"]
+
+	logger.debug("config(class): %s", config)
 	
         
 def kbdb_load_platform() :
@@ -141,7 +163,7 @@ def kbdb_load_platform() :
 	filename = "./platform/" + config.platform_name + "/" + KBDB_FILE
 	with open( filename  ) as f : 
 		kbdb.dic = json.load(f) 
-		debug_print(kbdb.dic) 
+		logger.debug(kbdb.dic) 
 
   
 def yara_load_platform() :
@@ -150,7 +172,7 @@ def yara_load_platform() :
 	filename = os.path.join(platform_dir, rulefile)
 	with open( filename  ) as f : 
 		myyara.platform_rules = yara.compile(filepath=filename)
-		debug_print(myyara.platform_rules) 
+		logger.debug('platform_rules: %r', myyara.platform_rules) 
 
 def yara_load_language() :
 	print ("load language ..." )
@@ -158,7 +180,7 @@ def yara_load_language() :
 	filename = os.path.join(language_dir, rulefile)
 	with open( filename  ) as f : 
 		myyara.language_rules = yara.compile(filepath=filename)
-		debug_print(myyara.language_rules) 
+		logger.debug('language_rules: %r', myyara.language_rules) 
 
 def yara_load_view() :
 	if config.view_name == "" :
@@ -169,7 +191,7 @@ def yara_load_view() :
 	filename = os.path.join(view_dir, rulefile)
 	with open( filename  ) as f : 
 		myyara.view_rules = yara.compile(filepath=filename)
-		debug_print(myyara.view_rules) 
+		logger.debug('view_rules: %r', myyara.view_rules) 
 
 
 def kbdb_add_vulnerability(filename, lines, item, match):
@@ -192,6 +214,13 @@ def yara_add_vulnerability(filename, lines, matches):
 	else:
 		match = matches 
 
+	
+	#exclude some vulnerabilities 
+	for vulname in config.exclude:
+		if vulname == match.rule:
+			logger.debug("EXCLUDE %s, %s", vulname, str(config.exclude))
+			return 
+	
 	length, variable, m_string = match.strings[0]
 	pattern = str(m_string, 'utf-8')
 
@@ -200,8 +229,6 @@ def yara_add_vulnerability(filename, lines, matches):
 	vulnerability += "filename : " + filename  + "\n" 
 	vulnerability += "vulnerability : " +  match.rule + "\n"  
 	vulnerability += "matches : " + pattern + "\n" 
-	if (config.debug_mode):
-		vulnerability += "vulnerability : " + match.rule + "\n"  
 	if match.tags: 
 		vulnerability += "tag : " + match.tags[0] + "\n" 
 	vulnerability += "=================================================\n" 
@@ -266,7 +293,7 @@ def sequence_find( line, keyword_array):
 	n = 0
 	found_count =0 
 	keyword_count = len(keyword_array) 
-	debug_print("search word = " + str(keyword_count) ) 
+	logger.debug("search word = %s", str(keyword_count) ) 
 	for key in keyword_array : 
 		n = line.find( key, n ) 
 		if ( n == -1 ): # not found 
@@ -322,12 +349,12 @@ def kbdb_audit( filename) :
 			for line in datafile :
 				#1. general platform kbdb search
 				for item in kbdb.dic["items"] : 
-					debug_print("json escape : " + item["keyword"])
+					logger.debug("json escape : %s", item["keyword"])
 					#if any(x in line for x in item["keyword"]):
 					#if(sequence_find(line, item["keyword"])):
 					key = item["keyword"]
 					#key = key.replace('\\\\','\\')
-					#debug_print("json escaped: " + key)
+					#logger.debug("json escaped: " + key)
 					match = re.search(key, line)
 					if match:
 						head_n = i-config.head_count
@@ -431,30 +458,40 @@ def walk_around(dirname):
 			if any(x in ext for x in exclude_exts):
 				continue 
 			else : # start audit 
-				debug_print(full_filename) 
+				logger.debug('full filename : %s', full_filename) 
 				#kbdb_audit(full_filename)
 				yara_audit(full_filename)
 
 
 	
 def main():
-	usage = "usage: %prog [options] arg"
+	usage = "usage: %prog [options] args"
 	parser = OptionParser(usage)
 
-	parser.add_option("-c", "--config", dest="config", metavar="CONFIG", help="use config file config.json")
-	parser.add_option("-d", "--directory", dest="directory", metavar="DIR", help="source code directory")
-	parser.add_option("-p", "--platform", dest="platform", metavar="PLATFORM", help="platform name ex) laravel ")
-	parser.add_option("-v", "--view", dest="view", metavar="VIEW", help="view name ex) smarty")
-	parser.add_option("-l", "--language", dest="language", metavar="LANGUAGE", help="language name ex) php")
-	parser.add_option("--head",  type="int", dest="head", help="show previous <num> lines")
-	parser.add_option("--tail",  type="int", dest="tail", help="show below <num> lines")
-	parser.add_option("-D", "--debug", dest="debug", help="verbose mode", action="store_true")
-	parser.add_option("-o",  "--output", dest="output", metavar="OUTPUT", help="save result into file")
+	parser.add_option("-c", "--config", dest="config", help="set configuration file  ex) -c config.json")
+	parser.add_option("-d", "--directory", dest="directory", help="set source directory ex ) -d /src")
+	parser.add_option("-l", "--language", dest="language", help="set language  ex) -l php")
+	parser.add_option("-p", "--platform", dest="platform",  help="set platform  ex) -p laravel ")
+	parser.add_option("-v", "--view", dest="view", help="set render or view ex) -v smarty")
+
+	group = OptionGroup(parser, "Output Options")
+	
+	group.add_option("-o", "--output", dest="output", help="save result into file ex) -o output.txt")
+	group.add_option("-e", "--exclude", dest="exclude", action='append', default=[], help="exclude some vulnerability ex) -e 'sql_injection'" ) 
+	group.add_option("--head",  type="int", dest="head", help="show above lines ex) --head 5")
+	group.add_option("--tail",  type="int", dest="tail", help="show below lines ex) --tail 5")
+	parser.add_option_group(group)
+
+	group = OptionGroup(parser, "Debug Options")
+	group.add_option("-D", "--debug", dest="debug", help="debug mode output of dbg_print", action="store_true")
+	parser.add_option_group(group)
+	
 
 	(options, args) = parser.parse_args()
 
 	if( options.debug ):
- 		config.debug_mode = True 
+		config.debug_mode = True
+		logger.setLevel(logging.DEBUG)
 
 	if (options.config): 
 		config.config_file = options.config 
@@ -488,6 +525,12 @@ def main():
 
 		if (options.tail):
 				config.tail_count = options.tail 
+
+		if(options.exclude):
+				logger.debug("EXCLUDE %s", str(options.exclude))
+				config.exclude = options.exclude 
+
+
 
 	check_config() 
 

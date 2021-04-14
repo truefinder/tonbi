@@ -1,0 +1,153 @@
+Definition,Vulerability Name,Reference,Typical severity,Type index
+os-command-injection,OS command injection,https://portswigger.net//web-security/os-command-injection,High,0x00100100
+sql-injection,SQL injection,https://portswigger.net/web-security/sql-injection,High,0x00100200
+sql-injection-second-order,SQL injection (second order),https://portswigger.net/kb/issues/00100210_sql-injection-second-order,High,0x00100210
+asp-net-tracing-enabled,ASP.NET tracing enabled,https://portswigger.net/kb/issues/00100280_asp-net-tracing-enabled,High,0x00100280
+file-path-traversal,File path traversal,https://portswigger.net/web-security/file-path-traversal,High,0x00100300
+xxe,XML external entity injection,https://portswigger.net/web-security/xxe,High,0x00100400
+ldap-injection,LDAP injection,https://portswigger.net/kb/issues/00100500_ldap-injection,High,0x00100500
+xpath-injection,XPath injection,https://portswigger.net/kb/issues/00100600_xpath-injection,High,0x00100600
+xml-injection,XML injection,https://portswigger.net/kb/issues/00100700_xml-injection,Medium,0x00100700
+asp-net-debugging-enabled,ASP.NET debugging enabled,https://portswigger.net/kb/issues/00100800_asp-net-debugging-enabled,Medium,0x00100800
+http-put-method-is-enabled,HTTP PUT method is enabled,https://portswigger.net/kb/issues/00100900_http-put-method-is-enabled,High,0x00100900
+out-of-band-resource-load-http,Out-of-band resource load (HTTP),https://portswigger.net/kb/issues/00100a00_out-of-band-resource-load-http,High,0x00100a00
+file-path-manipulation,File path manipulation,https://portswigger.net/kb/issues/00100b00_file-path-manipulation,High,0x00100b00
+php-code-injection,PHP code injection,https://portswigger.net/kb/issues/00100c00_php-code-injection,High,0x00100c00
+server-side-javascript-code-injection,Server-side JavaScript code injection,https://portswigger.net/kb/issues/00100d00_server-side-javascript-code-injection,High,0x00100d00
+perl-code-injection,Perl code injection,https://portswigger.net/kb/issues/00100e00_perl-code-injection,High,0x00100e00
+ruby-code-injection,Ruby code injection,https://portswigger.net/kb/issues/00100f00_ruby-code-injection,High,0x00100f00
+python-code-injection,Python code injection,https://portswigger.net/kb/issues/00100f10_python-code-injection,High,0x00100f10
+expression-language-injection,Expression Language injection,https://portswigger.net/kb/issues/00100f20_expression-language-injection,High,0x00100f20
+unidentified-code-injection,Unidentified code injection,https://portswigger.net/kb/issues/00101000_unidentified-code-injection,High,0x00101000
+server-side-template-injection,Server-side template injection,https://portswigger.net/web-security/server-side-template-injection,High,0x00101080
+ssi-injection,SSI injection,https://portswigger.net/kb/issues/00101100_ssi-injection,High,0x00101100
+stored,Cross-site scripting (stored),https://portswigger.net/web-security/cross-site-scripting/stored,High,0x00200100
+request-smuggling,HTTP request smuggling,https://portswigger.net/web-security/request-smuggling,High,0x00200140
+web-cache-poisoning,Web cache poisoning,https://portswigger.net/web-security/web-cache-poisoning,High,0x00200180
+http-response-header-injection,HTTP response header injection,https://portswigger.net/kb/issues/00200200_http-response-header-injection,High,0x00200200
+reflected,Cross-site scripting (reflected),https://portswigger.net/web-security/cross-site-scripting/reflected,High,0x00200300
+client-side-template-injection,Client-side template injection,https://portswigger.net/kb/issues/00200308_client-side-template-injection,High,0x00200308
+dom-based,Cross-site scripting (DOM-based),https://portswigger.net/web-security/cross-site-scripting/dom-based,High,0x00200310
+cross-site-scripting-reflected-dom-based,Cross-site scripting (reflected DOM-based),https://portswigger.net/kb/issues/00200311_cross-site-scripting-reflected-dom-based,High,0x00200311
+cross-site-scripting-stored-dom-based,Cross-site scripting (stored DOM-based),https://portswigger.net/kb/issues/00200312_cross-site-scripting-stored-dom-based,High,0x00200312
+javascript-injection,JavaScript injection (DOM-based),https://portswigger.net/web-security/dom-based/javascript-injection,High,0x00200320
+javascript-injection,JavaScript injection (reflected DOM-based),https://portswigger.net/web-security/dom-based/javascript-injection,High,0x00200321
+javascript-injection,JavaScript injection (stored DOM-based),https://portswigger.net/web-security/dom-based/javascript-injection,High,0x00200322
+path-relative-style-sheet-import,Path-relative style sheet import,https://portswigger.net/kb/issues/00200328_path-relative-style-sheet-import,Information,0x00200328
+client-side-sql-injection,Client-side SQL injection (DOM-based),https://portswigger.net/web-security/dom-based/client-side-sql-injection,High,0x00200330
+client-side-sql-injection,Client-side SQL injection (reflected DOM-based),https://portswigger.net/web-security/dom-based/client-side-sql-injection,High,0x00200331
+client-side-sql-injection,Client-side SQL injection (stored DOM-based),https://portswigger.net/web-security/dom-based/client-side-sql-injection,High,0x00200332
+websocket-url-poisoning,WebSocket URL poisoning (DOM-based),https://portswigger.net/web-security/dom-based/websocket-url-poisoning,High,0x00200340
+websocket-url-poisoning,WebSocket URL poisoning (reflected DOM-based),https://portswigger.net/web-security/dom-based/websocket-url-poisoning,High,0x00200341
+websocket-url-poisoning,WebSocket URL poisoning (stored DOM-based),https://portswigger.net/web-security/dom-based/websocket-url-poisoning,High,0x00200342
+local-file-path-manipulation,Local file path manipulation (DOM-based),https://portswigger.net/web-security/dom-based/local-file-path-manipulation,High,0x00200350
+local-file-path-manipulation,Local file path manipulation (reflected DOM-based),https://portswigger.net/web-security/dom-based/local-file-path-manipulation,High,0x00200351
+local-file-path-manipulation,Local file path manipulation (stored DOM-based),https://portswigger.net/web-security/dom-based/local-file-path-manipulation,High,0x00200352
+client-side-xpath-injection,Client-side XPath injection (DOM-based),https://portswigger.net/web-security/dom-based/client-side-xpath-injection,Low,0x00200360
+client-side-xpath-injection,Client-side XPath injection (reflected DOM-based),https://portswigger.net/web-security/dom-based/client-side-xpath-injection,Low,0x00200361
+client-side-xpath-injection,Client-side XPath injection (stored DOM-based),https://portswigger.net/web-security/dom-based/client-side-xpath-injection,Low,0x00200362
+client-side-json-injection,Client-side JSON injection (DOM-based),https://portswigger.net/web-security/dom-based/client-side-json-injection,Low,0x00200370
+client-side-json-injection,Client-side JSON injection (reflected DOM-based),https://portswigger.net/web-security/dom-based/client-side-json-injection,Low,0x00200371
+client-side-json-injection,Client-side JSON injection (stored DOM-based),https://portswigger.net/web-security/dom-based/client-side-json-injection,Low,0x00200372
+flash-cross-domain-policy,Flash cross-domain policy,https://portswigger.net/kb/issues/00200400_flash-cross-domain-policy,High,0x00200400
+silverlight-cross-domain-policy,Silverlight cross-domain policy,https://portswigger.net/kb/issues/00200500_silverlight-cross-domain-policy,High,0x00200500
+cors,Cross-origin resource sharing,https://portswigger.net/web-security/cors,Information,0x00200600
+cors,Cross-origin resource sharing: arbitrary origin trusted,https://portswigger.net/web-security/cors,High,0x00200601
+cors,Cross-origin resource sharing: unencrypted origin trusted,https://portswigger.net/web-security/cors,Low,0x00200602
+cors,Cross-origin resource sharing: all subdomains trusted,https://portswigger.net/web-security/cors,Low,0x00200603
+csrf,Cross-site request forgery,https://portswigger.net/web-security/csrf,Medium,0x00200700
+smtp-header-injection,SMTP header injection,https://portswigger.net/kb/issues/00200800_smtp-header-injection,Medium,0x00200800
+cleartext-submission-of-password,Cleartext submission of password,https://portswigger.net/kb/issues/00300100_cleartext-submission-of-password,High,0x00300100
+external-service-interaction-dns,External service interaction (DNS),https://portswigger.net/kb/issues/00300200_external-service-interaction-dns,High,0x00300200
+ssrf,External service interaction (HTTP),https://portswigger.net/web-security/ssrf,High,0x00300210
+external-service-interaction-smtp,External service interaction (SMTP),https://portswigger.net/kb/issues/00300220_external-service-interaction-smtp,Information,0x00300220
+referer-dependent-response,Referer-dependent response,https://portswigger.net/kb/issues/00400100_referer-dependent-response,Information,0x00400100
+spoofable-client-ip-address,Spoofable client IP address,https://portswigger.net/kb/issues/00400110_spoofable-client-ip-address,Information,0x00400110
+user-agent-dependent-response,User agent-dependent response,https://portswigger.net/kb/issues/00400120_user-agent-dependent-response,Information,0x00400120
+password-returned-in-later-response,Password returned in later response,https://portswigger.net/kb/issues/00400200_password-returned-in-later-response,Medium,0x00400200
+password-submitted-using-get-method,Password submitted using GET method,https://portswigger.net/kb/issues/00400300_password-submitted-using-get-method,Low,0x00400300
+password-returned-in-url-query-string,Password returned in URL query string,https://portswigger.net/kb/issues/00400400_password-returned-in-url-query-string,Low,0x00400400
+sql-statement-in-request-parameter,SQL statement in request parameter,https://portswigger.net/kb/issues/00400480_sql-statement-in-request-parameter,Medium,0x00400480
+cross-domain-post,Cross-domain POST,https://portswigger.net/kb/issues/00400500_cross-domain-post,Information,0x00400500
+asp-net-viewstate-without-mac-enabled,ASP.NET ViewState without MAC enabled,https://portswigger.net/kb/issues/00400600_asp-net-viewstate-without-mac-enabled,Low,0x00400600
+xml-entity-expansion,XML entity expansion,https://portswigger.net/kb/issues/00400700_xml-entity-expansion,Medium,0x00400700
+long-redirection-response,Long redirection response,https://portswigger.net/kb/issues/00400800_long-redirection-response,Information,0x00400800
+deserialization,Serialized object in HTTP message,https://portswigger.net/web-security/deserialization,High,0x00400900
+duplicate-cookies-set,Duplicate cookies set,https://portswigger.net/kb/issues/00400a00_duplicate-cookies-set,Information,0x00400a00
+input-returned-in-response-stored,Input returned in response (stored),https://portswigger.net/kb/issues/00400b00_input-returned-in-response-stored,Information,0x00400b00
+input-returned-in-response-reflected,Input returned in response (reflected),https://portswigger.net/kb/issues/00400c00_input-returned-in-response-reflected,Information,0x00400c00
+suspicious-input-transformation-reflected,Suspicious input transformation (reflected),https://portswigger.net/kb/issues/00400d00_suspicious-input-transformation-reflected,Information,0x00400d00
+suspicious-input-transformation-stored,Suspicious input transformation (stored),https://portswigger.net/kb/issues/00400e00_suspicious-input-transformation-stored,Information,0x00400e00
+request-url-override,Request URL override,https://portswigger.net/kb/issues/00400f00_request-url-override,Information,0x00400f00
+vulnerable-javascript-dependency,Vulnerable JavaScript dependency,https://portswigger.net/kb/issues/00500080_vulnerable-javascript-dependency,Low,0x00500080
+open-redirection-reflected,Open redirection (reflected),https://portswigger.net/kb/issues/00500100_open-redirection-reflected,Low,0x00500100
+open-redirection-stored,Open redirection (stored),https://portswigger.net/kb/issues/00500101_open-redirection-stored,Medium,0x00500101
+open-redirection,Open redirection (DOM-based),https://portswigger.net/web-security/dom-based/open-redirection,Low,0x00500110
+open-redirection,Open redirection (reflected DOM-based),https://portswigger.net/web-security/dom-based/open-redirection,Low,0x00500111
+open-redirection,Open redirection (stored DOM-based),https://portswigger.net/web-security/dom-based/open-redirection,Medium,0x00500112
+tls-cookie-without-secure-flag-set,TLS cookie without secure flag set,https://portswigger.net/kb/issues/00500200_tls-cookie-without-secure-flag-set,Medium,0x00500200
+cookie-scoped-to-parent-domain,Cookie scoped to parent domain,https://portswigger.net/kb/issues/00500300_cookie-scoped-to-parent-domain,Low,0x00500300
+cross-domain-referer-leakage,Cross-domain Referer leakage,https://portswigger.net/kb/issues/00500400_cross-domain-referer-leakage,Information,0x00500400
+cross-domain-script-include,Cross-domain script include,https://portswigger.net/kb/issues/00500500_cross-domain-script-include,Information,0x00500500
+cookie-without-httponly-flag-set,Cookie without HttpOnly flag set,https://portswigger.net/kb/issues/00500600_cookie-without-httponly-flag-set,Low,0x00500600
+session-token-in-url,Session token in URL,https://portswigger.net/kb/issues/00500700_session-token-in-url,Medium,0x00500700
+password-field-with-autocomplete-enabled,Password field with autocomplete enabled,https://portswigger.net/kb/issues/00500800_password-field-with-autocomplete-enabled,Low,0x00500800
+password-value-set-in-cookie,Password value set in cookie,https://portswigger.net/kb/issues/00500900_password-value-set-in-cookie,Medium,0x00500900
+file-upload-functionality,File upload functionality,https://portswigger.net/kb/issues/00500980_file-upload-functionality,Information,0x00500980
+clickjacking,Frameable response (potential Clickjacking),https://portswigger.net/web-security/clickjacking,Information,0x005009a0
+browser-cross-site-scripting-filter-disabled,Browser cross-site scripting filter disabled,https://portswigger.net/kb/issues/005009b0_browser-cross-site-scripting-filter-disabled,Information,0x005009b0
+http-trace-method-is-enabled,HTTP TRACE method is enabled,https://portswigger.net/kb/issues/00500a00_http-trace-method-is-enabled,Information,0x00500a00
+cookie-manipulation,Cookie manipulation (DOM-based),https://portswigger.net/web-security/dom-based/cookie-manipulation,Low,0x00500b00
+cookie-manipulation,Cookie manipulation (reflected DOM-based),https://portswigger.net/web-security/dom-based/cookie-manipulation,Low,0x00500b01
+cookie-manipulation,Cookie manipulation (stored DOM-based),https://portswigger.net/web-security/dom-based/cookie-manipulation,Low,0x00500b02
+ajax-request-header-manipulation,Ajax request header manipulation (DOM-based),https://portswigger.net/web-security/dom-based/ajax-request-header-manipulation,Low,0x00500c00
+ajax-request-header-manipulation,Ajax request header manipulation (reflected DOM-based),https://portswigger.net/web-security/dom-based/ajax-request-header-manipulation,Low,0x00500c01
+ajax-request-header-manipulation,Ajax request header manipulation (stored DOM-based),https://portswigger.net/web-security/dom-based/ajax-request-header-manipulation,Low,0x00500c02
+denial-of-service,Denial of service (DOM-based),https://portswigger.net/web-security/dom-based/denial-of-service,Information,0x00500d00
+denial-of-service,Denial of service (reflected DOM-based),https://portswigger.net/web-security/dom-based/denial-of-service,Information,0x00500d01
+denial-of-service,Denial of service (stored DOM-based),https://portswigger.net/web-security/dom-based/denial-of-service,Low,0x00500d02
+web-message-manipulation,HTML5 web message manipulation (DOM-based),https://portswigger.net/web-security/dom-based/web-message-manipulation,Information,0x00500e00
+web-message-manipulation,HTML5 web message manipulation (reflected DOM-based),https://portswigger.net/web-security/dom-based/web-message-manipulation,Information,0x00500e01
+web-message-manipulation,HTML5 web message manipulation (stored DOM-based),https://portswigger.net/web-security/dom-based/web-message-manipulation,Information,0x00500e02
+html5-storage-manipulation,HTML5 storage manipulation (DOM-based),https://portswigger.net/web-security/dom-based/html5-storage-manipulation,Information,0x00500f00
+html5-storage-manipulation,HTML5 storage manipulation (reflected DOM-based),https://portswigger.net/web-security/dom-based/html5-storage-manipulation,Information,0x00500f01
+html5-storage-manipulation,HTML5 storage manipulation (stored DOM-based),https://portswigger.net/web-security/dom-based/html5-storage-manipulation,Information,0x00500f02
+link-manipulation,Link manipulation (DOM-based),https://portswigger.net/web-security/dom-based/link-manipulation,Low,0x00501000
+link-manipulation,Link manipulation (reflected DOM-based),https://portswigger.net/web-security/dom-based/link-manipulation,Low,0x00501001
+link-manipulation,Link manipulation (stored DOM-based),https://portswigger.net/web-security/dom-based/link-manipulation,Low,0x00501002
+link-manipulation-reflected,Link manipulation (reflected),https://portswigger.net/kb/issues/00501003_link-manipulation-reflected,Information,0x00501003
+link-manipulation-stored,Link manipulation (stored),https://portswigger.net/kb/issues/00501004_link-manipulation-stored,Information,0x00501004
+document-domain-manipulation,Document domain manipulation (DOM-based),https://portswigger.net/web-security/dom-based/document-domain-manipulation,Medium,0x00501100
+document-domain-manipulation,Document domain manipulation (reflected DOM-based),https://portswigger.net/web-security/dom-based/document-domain-manipulation,Medium,0x00501101
+document-domain-manipulation,Document domain manipulation (stored DOM-based),https://portswigger.net/web-security/dom-based/document-domain-manipulation,Medium,0x00501102
+dom-data-manipulation,DOM data manipulation (DOM-based),https://portswigger.net/web-security/dom-based/dom-data-manipulation,Information,0x00501200
+dom-data-manipulation,DOM data manipulation (reflected DOM-based),https://portswigger.net/web-security/dom-based/dom-data-manipulation,Information,0x00501201
+dom-data-manipulation,DOM data manipulation (stored DOM-based),https://portswigger.net/web-security/dom-based/dom-data-manipulation,Information,0x00501202
+css-injection-reflected,CSS injection (reflected),https://portswigger.net/kb/issues/00501300_css-injection-reflected,Medium,0x00501300
+css-injection-stored,CSS injection (stored),https://portswigger.net/kb/issues/00501301_css-injection-stored,Medium,0x00501301
+client-side-http-parameter-pollution-reflected,Client-side HTTP parameter pollution (reflected),https://portswigger.net/kb/issues/00501400_client-side-http-parameter-pollution-reflected,Low,0x00501400
+client-side-http-parameter-pollution-stored,Client-side HTTP parameter pollution (stored),https://portswigger.net/kb/issues/00501401_client-side-http-parameter-pollution-stored,Low,0x00501401
+form-action-hijacking-reflected,Form action hijacking (reflected),https://portswigger.net/kb/issues/00501500_form-action-hijacking-reflected,Medium,0x00501500
+form-action-hijacking-stored,Form action hijacking (stored),https://portswigger.net/kb/issues/00501501_form-action-hijacking-stored,Medium,0x00501501
+database-connection-string-disclosed,Database connection string disclosed,https://portswigger.net/kb/issues/00600080_database-connection-string-disclosed,Medium,0x00600080
+source-code-disclosure,Source code disclosure,https://portswigger.net/kb/issues/006000b0_source-code-disclosure,Low,0x006000b0
+backup-file,Backup file,https://portswigger.net/kb/issues/006000d8_backup-file,Information,0x006000d8
+directory-listing,Directory listing,https://portswigger.net/kb/issues/00600100_directory-listing,Information,0x00600100
+email-addresses-disclosed,Email addresses disclosed,https://portswigger.net/kb/issues/00600200_email-addresses-disclosed,Information,0x00600200
+private-ip-addresses-disclosed,Private IP addresses disclosed,https://portswigger.net/kb/issues/00600300_private-ip-addresses-disclosed,Information,0x00600300
+social-security-numbers-disclosed,Social security numbers disclosed,https://portswigger.net/kb/issues/00600400_social-security-numbers-disclosed,Information,0x00600400
+credit-card-numbers-disclosed,Credit card numbers disclosed,https://portswigger.net/kb/issues/00600500_credit-card-numbers-disclosed,Information,0x00600500
+private-key-disclosed,Private key disclosed,https://portswigger.net/kb/issues/00600550_private-key-disclosed,Information,0x00600550
+robots-txt-file,Robots.txt file,https://portswigger.net/kb/issues/00600600_robots-txt-file,Information,0x00600600
+cacheable-https-response,Cacheable HTTPS response,https://portswigger.net/kb/issues/00700100_cacheable-https-response,Information,0x00700100
+base64-encoded-data-in-parameter,Base64-encoded data in parameter,https://portswigger.net/kb/issues/00700200_base64-encoded-data-in-parameter,Information,0x00700200
+multiple-content-types-specified,Multiple content types specified,https://portswigger.net/kb/issues/00800100_multiple-content-types-specified,Information,0x00800100
+html-does-not-specify-charset,HTML does not specify charset,https://portswigger.net/kb/issues/00800200_html-does-not-specify-charset,Information,0x00800200
+html-uses-unrecognized-charset,HTML uses unrecognized charset,https://portswigger.net/kb/issues/00800300_html-uses-unrecognized-charset,Information,0x00800300
+content-type-incorrectly-stated,Content type incorrectly stated,https://portswigger.net/kb/issues/00800400_content-type-incorrectly-stated,Low,0x00800400
+content-type-is-not-specified,Content type is not specified,https://portswigger.net/kb/issues/00800500_content-type-is-not-specified,Information,0x00800500
+tls-certificate,TLS certificate,https://portswigger.net/kb/issues/01000100_tls-certificate,Medium,0x01000100
+unencrypted-communications,Unencrypted communications,https://portswigger.net/kb/issues/01000200_unencrypted-communications,Low,0x01000200
+strict-transport-security-not-enforced,Strict transport security not enforced,https://portswigger.net/kb/issues/01000300_strict-transport-security-not-enforced,Low,0x01000300
+mixed-content,Mixed content,https://portswigger.net/kb/issues/01000400_mixed-content,Information,0x01000400
+extension-generated-issue,Extension generated issue,https://portswigger.net/kb/issues/08000000_extension-generated-issue,Information,0x08000000

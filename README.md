@@ -32,16 +32,30 @@ $python tonbi.py -d ./source_dir -p your_platform -l language
 
 ## Options 
 ```
--d <source> top source code directory
--p <paltform> server-side platform name
--l <language> source code language    
--v <view> render template name
--head <n> display haed n line
--tail <n> display tail n line 
--o <output> save result into text file
--D verbose output
--c use config file
+Usage: tonbi.py [options] args
 
+Options:
+  -h, --help            show this help message and exit
+  -c CONFIG, --config=CONFIG
+                        set configuration file  ex) -c config.json
+  -d DIRECTORY, --directory=DIRECTORY
+                        set source directory ex ) -d /src
+  -l LANGUAGE, --language=LANGUAGE
+                        set language  ex) -l php
+  -p PLATFORM, --platform=PLATFORM
+                        set platform  ex) -p laravel
+  -v VIEW, --view=VIEW  set render or view ex) -v smarty
+
+  Output Options:
+    -o OUTPUT, --output=OUTPUT
+                        save result into file ex) -o output.txt
+    -e EXCLUDE, --exclude=EXCLUDE
+                        exclude some vulnerability ex) -e 'sql_injection'
+    --head=HEAD         show above lines ex) --head 5
+    --tail=TAIL         show below lines ex) --tail 5
+
+  Debug Options:
+    -D, --debug         debug mode output of dbg_print
 ```
 
 ## Usage with configuration file 
@@ -57,8 +71,9 @@ create config.json like below
 	"tail_count" : 5,
 	"output" : "output.txt",
 	"plugins" : [  ],
-	"ignore_files" :  [ "jpg", "png", "jpeg", "ico", "gif", "tif" , "tiff", "bmp",  "db", "css", "map", "md", "gitkeep", "sql", "DS_Store", "js", "propreties" , "csv", "gz", "tgz", "zip", "swf", "pyc", "phar" ] 
-	"ignore_dirs" : ["node_modules"] 
+	"ignore_files" :  [ "jpg", "png", "jpeg", "ico", "gif", "tif" , "tiff", "bmp",  "db", "css", "map", "md", "gitkeep", "sql", "DS_Store", "js", "propreties" , "csv", "gz", "tgz", "zip", "swf", "pyc", "phar" ], 
+	"ignore_dirs" : ["node_modules"],
+	"exclude" : ["ssl_misconfiguration"] 
 }
 ```
 And run tonbi

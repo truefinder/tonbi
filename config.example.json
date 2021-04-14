@@ -8,6 +8,7 @@
 	"output" : "output.txt",
 	"plugins" : [ "" ],
 	"ignore_files" :  [ "jpg", "png", "jpeg", "ico", "gif", "tif" , "tiff", "bmp" ] ,
-	"ignore_dirs" : ["node_modules"] 
+	"ignore_dirs" : ["node_modules"],
+	"exclude" : ["ssl_misconfiguration"] 
 }
 
