@@ -133,12 +133,23 @@ def load_config():
 		logger.debug('config_dic(json): %r', config_dic) 
 		
 		# TODO set config dic 
-		config.source_directory = config_dic["source_directory"] 
-		config.platform_name = config_dic["platform_name"] 
-		config.language = config_dic["language"]
-		config.head_count = config_dic["head_count"] 
-		config.tail_count = config_dic["tail_count"] 
-		config.ignore_files = config_dic["ignore_files"]
+		if(config_dic["source_directory"] ):
+			config.source_directory = config_dic["source_directory"] 
+
+		if(config_dic["platform_name"] ):
+			config.platform_name = config_dic["platform_name"] 
+
+		if(config_dic["language"]):
+			config.language = config_dic["language"]
+
+		if(config_dic["head_count"]) :
+			config.head_count = config_dic["head_count"] 
+		
+		if(config_dic["tail_count"]):
+			config.tail_count = config_dic["tail_count"] 
+		
+		if(config_dic["ignore_files"]):
+			config.ignore_files = config_dic["ignore_files"]
 
 		if(config_dic["view_name"]) :
 			config.view_name = config_dic["view_name"] 
@@ -497,38 +508,39 @@ def main():
 		config.config_file = options.config 
 		load_config()
 
-	else : 
-		if (options.directory):
-				config.source_directory = options.directory 
-		else:
-				parser.error("app source directory not defined")
+	if (options.directory ):
+			config.source_directory = options.directory 
+	else:
+		if(config.source_directory is None):
+			parser.error("app source directory not defined")
 
-		if (options.platform):
-				config.platform_name = options.platform 
-		else :
-				parser.error("app platform name not defined")  
+	if (options.platform):
+			config.platform_name = options.platform 
+	else :
+		if(config.platform_name is None):
+			parser.error("app platform name not defined")  
 
-		if (options.language):
-				config.language = options.language 
-		else :
-				parser.error("app language name not defined")  
+	if (options.language):
+			config.language = options.language 
+	else :
+		if(config.language is None ):
+			parser.error("app language name not defined")  
 
-		if (options.view):
-				config.view_name = options.view 
+	if (options.view):
+			config.view_name = options.view 
 
-		if (options.output):
-				config.output = options.output 
+	if (options.output):
+			config.output = options.output 
 
+	if (options.head):
+			config.head_count = options.head 
 
-		if (options.head):
-				config.head_count = options.head 
+	if (options.tail):
+			config.tail_count = options.tail 
 
-		if (options.tail):
-				config.tail_count = options.tail 
-
-		if(options.exclude):
-				logger.debug("EXCLUDE %s", str(options.exclude))
-				config.exclude = options.exclude 
+	if(options.exclude):
+			logger.debug("EXCLUDE %s", str(options.exclude))
+			config.exclude = options.exclude 
 
 
 
