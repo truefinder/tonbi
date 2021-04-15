@@ -123,8 +123,50 @@ def prepare_output():
 
 def check_config():
 	print("check configuration...")
-	
+	try:
+		os.stat(config.source_directory)
+	except :
+		print("source directory not found : ", config.source_directory)
+		exit()
 
+	try : 
+		rulefile = config.platform_name + "." + YARA_EXT
+		filename = os.path.join(platform_dir, rulefile)
+		os.stat(filename)
+	except:
+		print("platform not found : ", config.platform_name)
+		exit()
+	
+	try : 
+		rulefile = config.language + "." + YARA_EXT
+		filename = os.path.join(language_dir, rulefile)
+		os.stat(filename) 
+	except:
+		print("language not found : ", config.language )
+		exit()
+
+
+	if config.view_name : 
+		try:
+			rulefile = config.view_name + "." + YARA_EXT
+			filename = os.path.join(view_dir, rulefile)
+			os.stat(filename)
+		except: 
+			print("view not found : ", config.view_name)
+			exit()
+
+	if config.plugins : 
+		for p in config.plugins :
+			if p : 
+				pluginfile = p + ".py"
+				plugindir = os.path.join(plugin_dir, p)
+				plugin_filename = os.path.join(plugindir, pluginfile)
+				try : 
+					os.stat(plugin_filename) 
+				except:
+					print("plugin not found : ", p)
+					exit()
+			
 
 def load_config():
 	print("load config setting ")
@@ -133,37 +175,37 @@ def load_config():
 		logger.debug('config_dic(json): %r', config_dic) 
 		
 		# TODO set config dic 
-		if(config_dic["source_directory"] ):
+		if( "source_directory" in config_dic ):
 			config.source_directory = config_dic["source_directory"] 
 
-		if(config_dic["platform_name"] ):
+		if("platform_name" in config_dic ):
 			config.platform_name = config_dic["platform_name"] 
 
-		if(config_dic["language"]):
+		if("language" in config_dic):
 			config.language = config_dic["language"]
 
-		if(config_dic["head_count"]) :
+		if("head_count" in config_dic) :
 			config.head_count = config_dic["head_count"] 
 		
-		if(config_dic["tail_count"]):
+		if("tail_count" in config_dic):
 			config.tail_count = config_dic["tail_count"] 
 		
-		if(config_dic["ignore_files"]):
+		if("ignore_files" in config_dic):
 			config.ignore_files = config_dic["ignore_files"]
 
-		if(config_dic["view_name"]) :
+		if("view_name" in config_dic) :
 			config.view_name = config_dic["view_name"] 
 
-		if(config_dic["output"]):
+		if("output" in config_dic):
 			config.output = config_dic["output"] 
 		
-		if(config_dic["plugins"]):
+		if("plugins" in config_dic ):
 			config.plugins = config_dic["plugins"] 
 		
-		if(config_dic["ignore_dirs"]):
+		if("ignore_dirs" in config_dic):
 			config.ignore_dirs = config_dic["ignore_dirs"]
 
-		if(config_dic["exclude"]):
+		if("exclude" in config_dic):
 			config.exclude = config_dic["exclude"]
 
 	logger.debug("config(class): %s", config)
@@ -504,26 +546,22 @@ def main():
 		config.debug_mode = True
 		logger.setLevel(logging.DEBUG)
 
-	if (options.config): 
-		config.config_file = options.config 
-		load_config()
-
 	if (options.directory ):
 			config.source_directory = options.directory 
 	else:
-		if(config.source_directory is None):
+		if(options.config is None):
 			parser.error("app source directory not defined")
 
 	if (options.platform):
 			config.platform_name = options.platform 
 	else :
-		if(config.platform_name is None):
+		if(options.config is None):
 			parser.error("app platform name not defined")  
 
 	if (options.language):
 			config.language = options.language 
 	else :
-		if(config.language is None ):
+		if(options.config is None ):
 			parser.error("app language name not defined")  
 
 	if (options.view):
@@ -542,6 +580,9 @@ def main():
 			logger.debug("EXCLUDE %s", str(options.exclude))
 			config.exclude = options.exclude 
 
+	if (options.config): 
+		config.config_file = options.config 
+		load_config()
 
 
 	check_config() 
