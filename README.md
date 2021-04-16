@@ -93,7 +93,7 @@ $python tonbi.py -c config.json
 
 | Supported | Laravel  | Codeigniter | Django  | Flask | Typescript  | Corilla | Ethna | 
 |-----------|----------|-------------|---------|-------|-------------|---------|-------|
-| Planned   | Symfony  | Fuelphp     | CakePHP | Silex | Fhalcon     |         |       |  
+| Planned   | Symfony  | Fuelphp     | CakePHP | Silex | Phalcon     | Rails   | Scala |  
 
 
 ## Languages
@@ -109,19 +109,6 @@ $python tonbi.py -c config.json
 |-----------|---------|------|-------|-------|-----------|
 | Planned   |         |      |       |       |           |
 
-
-
-
-
-## Update Plans 
-* PHP
-    - Symfony, CakePHP, Fuelphp, Phalcon, Silex, Yii
-* Python 
-    - Kivy, Bottle
-* Ruby
-    - Rails 
-* Javascript 
-    - Scala 
 
 ## Add your own foundings to platform
 ```
