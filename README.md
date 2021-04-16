@@ -1,8 +1,16 @@
+![pypi](https://img.shields.io/pypi/v/pybadges.svg)
+![versions](https://img.shields.io/pypi/pyversions/pybadges.svg)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
+
+
 # TONBI
 <img src="https://user-images.githubusercontent.com/4240789/109131685-5fbdb500-7796-11eb-82d1-93237d83430c.jpg" width=250> 
 
 ## What's TONBI?
+
+
 TONBI is a framework based web application source code auditing tool for security researchers. It supports various web application framework such as Laravel, Symfony, CakePHP, Codeigniter, ... It gives you an efficient auditing method for finding vulnerabilities of your web applications 
+
 
 ## Install 
 Download tonbi from github 
@@ -82,26 +90,28 @@ $python tonbi.py -c config.json
 ```
 
 ## Frameworks 
-* Laravel 
-* Codeigniter
-* Django
-* Flask
-* Typescript 
-* Gorilla
-* Ethna
 
-## Viewes 
-* Smarty
-* Twig 
-* Blade 
-* Flexy
-* Electron
+| Supported | Laravel  | Codeigniter | Django  | Flask | Typescript  | Corilla | Ethna | 
+|-----------|----------|-------------|---------|-------|-------------|---------|-------|
+| Planned   | Symfony  | Fuelphp     | CakePHP | Silex | Fhalcon     |         |       |  
+
 
 ## Languages
-* php 
-* python
-* go
-* nodejs 
+
+| Supported | go  | php | nodejs | python |   |
+|-----------|-----|-----|--------|--------|---|
+| Planned   | jsp | asp | java   | .NET   |   |
+
+
+## Viewes 
+
+| Supported | Smarty  | Twig | Blade | Flexy | Electron  |
+|-----------|---------|------|-------|-------|-----------|
+| Planned   |         |      |       |       |           |
+
+
+
+
 
 ## Update Plans 
 * PHP
