@@ -91,23 +91,23 @@ $python tonbi.py -c config.json
 
 ## Frameworks 
 
-| Supported | Laravel  | Codeigniter | Django  | Flask | Typescript  | Corilla | Ethna | 
-|-----------|----------|-------------|---------|-------|-------------|---------|-------|
-| Planned   | Symfony  | Fuelphp     | CakePHP | Silex | Phalcon     | Rails   | Scala |  
+| Supported | Laravel  | Codeigniter | Django  | Flask |  Corilla | Ethna   | Nodejs  | 
+|-----------|----------|-------------|---------|-------|----------|---------|---------|
+| Planned   | Symfony  | Fuelphp     | CakePHP | Silex | Phalcon  | Rails   | Express |  
 
 
 ## Languages
 
-| Supported | go  | php | nodejs | python |   |
-|-----------|-----|-----|--------|--------|---|
-| Planned   | jsp | asp | java   | .NET   |   |
+| Supported | go  | php | javascript | python | typescript |
+|-----------|-----|-----|------------|--------|------------|
+| Planned   | jsp | asp | java       | .NET   |            |
 
 
 ## Viewes 
 
 | Supported | Smarty  | Twig | Blade | Flexy | Electron  |
 |-----------|---------|------|-------|-------|-----------|
-| Planned   |         |      |       |       |           |
+| Planned   | React   |      |       |       |           |
 
 
 ## Add your own foundings to platform
