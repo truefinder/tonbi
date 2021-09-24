@@ -34,7 +34,7 @@ $ python setup.py build --dynamic-linking
 ```
 ## Basic Usage 
 ```
-$python tonbi.py -d ./source_dir -p your_platform -l language 
+$python tonbi.py -d ./source_dir -f your_framework -l language 
 
 ```
 
@@ -50,8 +50,8 @@ Options:
                         set source directory ex ) -d /src
   -l LANGUAGE, --language=LANGUAGE
                         set language  ex) -l php
-  -p PLATFORM, --platform=PLATFORM
-                        set platform  ex) -p laravel
+  -f FRAMEWORK, --framework=FRAMEWORK
+                        set framework  ex) -p laravel
   -v VIEW, --view=VIEW  set render or view ex) -v smarty
 
   Output Options:
@@ -72,7 +72,7 @@ create config.json like below
 ```
 {
 	"source_directory" : "../sample/codeigniter/src",
-	"platform_name" : "codeigniter",
+	"framework_name" : "codeigniter",
 	"language" : "php", 
 	"view_name" : "twig",
 	"head_count" : 5,
@@ -110,14 +110,14 @@ $python tonbi.py -c config.json
 | Planned   | React   |      |       |       |           |
 
 
-## Add your own foundings to platform
+## Add your own foundings to framework
 ```
-vi  platform/<platform_name>.yar
+vi  framework/<framework_name>.yar
 /* please confer yara rule page  
  * https://yara.readthedocs.io/en/stable/writingrules.html
  */  
 
-rule my_xss : <platform_name>  
+rule my_xss : <framework_name>  
 {
     strings : 
         $xss1 = /render(.*false/ 

@@ -14,7 +14,7 @@ logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
 #relative path
 tonbi_dir = os.path.dirname(__file__)
-platform_dir = os.path.join(tonbi_dir, 'platform')
+framework_dir = os.path.join(tonbi_dir, 'framework')
 language_dir = os.path.join(tonbi_dir, 'language')
 view_dir = os.path.join(tonbi_dir, 'view')
 plugin_dir = os.path.join(tonbi_dir, 'plugin')
@@ -52,7 +52,7 @@ class Config :
 	debug_mode = False 
 	config_file =""
 	source_directory = ""
-	platform_name = ""
+	framework_name = ""
 	view_name = "" 
 	language = ""
 	head_count = DEFAULT_LINES 
@@ -82,7 +82,7 @@ class Kbdb :
 	dic = "" 
 
 class Yara : 
-	platform_rules = "" 
+	framework_rules = "" 
 	language_rules = ""
 	view_rules = "" 
 
@@ -130,11 +130,11 @@ def check_config():
 		exit()
 
 	try : 
-		rulefile = config.platform_name + "." + YARA_EXT
-		filename = os.path.join(platform_dir, rulefile)
+		rulefile = config.framework_name + "." + YARA_EXT
+		filename = os.path.join(framework_dir, rulefile)
 		os.stat(filename)
 	except:
-		print("platform not found : ", config.platform_name)
+		print("framework not found : ", config.framework_name)
 		exit()
 	
 	try : 
@@ -178,8 +178,8 @@ def load_config():
 		if( "source_directory" in config_dic ):
 			config.source_directory = config_dic["source_directory"] 
 
-		if("platform_name" in config_dic ):
-			config.platform_name = config_dic["platform_name"] 
+		if("framework_name" in config_dic ):
+			config.framework_name = config_dic["framework_name"] 
 
 		if("language" in config_dic):
 			config.language = config_dic["language"]
@@ -211,21 +211,21 @@ def load_config():
 	logger.debug("config(class): %s", config)
 	
         
-def kbdb_load_platform() :
-	print ("load platform ..." )
-	filename = "./platform/" + config.platform_name + "/" + KBDB_FILE
+def kbdb_load_framework() :
+	print ("load framework ..." )
+	filename = "./framework/" + config.framework_name + "/" + KBDB_FILE
 	with open( filename  ) as f : 
 		kbdb.dic = json.load(f) 
 		logger.debug(kbdb.dic) 
 
   
-def yara_load_platform() :
-	print ("load platform ..." )
-	rulefile = config.platform_name + "." + YARA_EXT
-	filename = os.path.join(platform_dir, rulefile)
+def yara_load_framework() :
+	print ("load framework ..." )
+	rulefile = config.framework_name + "." + YARA_EXT
+	filename = os.path.join(framework_dir, rulefile)
 	with open( filename  ) as f : 
-		myyara.platform_rules = yara.compile(filepath=filename)
-		logger.debug('platform_rules: %r', myyara.platform_rules) 
+		myyara.framework_rules = yara.compile(filepath=filename)
+		logger.debug('framework_rules: %r', myyara.framework_rules) 
 
 def yara_load_language() :
 	print ("load language ..." )
@@ -400,7 +400,7 @@ def kbdb_audit( filename) :
 			AuditItem.filename = filename 
 			
 			for line in datafile :
-				#1. general platform kbdb search
+				#1. general framework kbdb search
 				for item in kbdb.dic["items"] : 
 					logger.debug("json escape : %s", item["keyword"])
 					#if any(x in line for x in item["keyword"]):
@@ -439,7 +439,7 @@ def kbdb_audit( filename) :
 
 
 def yara_audit( filename) :
-	print("[%s][%s][%s] : " %(config.language, config.platform_name, config.view_name) + filename ) 
+	print("[%s][%s][%s] : " %(config.language, config.framework_name, config.view_name) + filename ) 
 	try: 
 		with open( filename, errors='replace' ) as f :
 			i = 0
@@ -455,8 +455,8 @@ def yara_audit( filename) :
 					print("failed to analysis : one line is too long ... ")
 					continue 
 				
-				#1. platform yara search
-				matches = myyara.platform_rules.match(data=line)
+				#1. framework yara search
+				matches = myyara.framework_rules.match(data=line)
 				if matches:
 					lines = scrap_lines(line, datafile,i)
 					yara_add_vulnerability(filename, lines, matches) 
@@ -524,7 +524,7 @@ def main():
 	parser.add_option("-c", "--config", dest="config", help="set configuration file  ex) -c config.json")
 	parser.add_option("-d", "--directory", dest="directory", help="set source directory ex ) -d /src")
 	parser.add_option("-l", "--language", dest="language", help="set language  ex) -l php")
-	parser.add_option("-p", "--platform", dest="platform",  help="set platform  ex) -p laravel ")
+	parser.add_option("-f", "--framework", dest="framework",  help="set framework  ex) -f laravel ")
 	parser.add_option("-v", "--view", dest="view", help="set render or view ex) -v smarty")
 
 	group = OptionGroup(parser, "Output Options")
@@ -552,11 +552,11 @@ def main():
 		if(options.config is None):
 			parser.error("app source directory not defined")
 
-	if (options.platform):
-			config.platform_name = options.platform 
+	if (options.framework):
+			config.framework_name = options.framework 
 	else :
 		if(options.config is None):
-			parser.error("app platform name not defined")  
+			parser.error("app framework name not defined")  
 
 	if (options.language):
 			config.language = options.language 
@@ -587,8 +587,8 @@ def main():
 
 	check_config() 
 
-	#kbdb_load_platform()
-	yara_load_platform() 
+	#kbdb_load_framework()
+	yara_load_framework() 
 
 	yara_load_language()
 
