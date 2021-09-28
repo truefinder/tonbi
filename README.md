@@ -91,29 +91,29 @@ $python tonbi.py -c config.json
 
 ## Frameworks 
 
-| Supported | Laravel  | Codeigniter | Django  | Flask |  Corilla | Ethna   | Nodejs  | 
-|-----------|----------|-------------|---------|-------|----------|---------|---------|
-| Planned   | Symfony  | Fuelphp     | CakePHP | Silex | Phalcon  | Rails   | Express |  
+ Supporting | laravel, codeigniter, django, flask,  gorilla, ethna, nodejs  
+----------- | ------------
+ Planning   | symfony, fuelphp, cakePHP, silex, phalcon, rails, express   
 
 
 ## Languages
 
-| Supported | go  | php | javascript | python | typescript |
-|-----------|-----|-----|------------|--------|------------|
-| Planned   | jsp | asp | java       | .NET   |            |
+ Supporting | go, php, javascript, python, typescript 
+-----------|-----
+ Planning   | jsp, asp, java, .NET   
 
 
 ## Viewes 
 
-| Supported | Smarty  | Twig | Blade | Flexy | Electron  |
-|-----------|---------|------|-------|-------|-----------|
-| Planned   | React   |      |       |       |           |
+ Supporting | smarty, twig, blade, flexy, electron  
+-----------|---------
+ Planning   | react   
 
 
 ## Add your own foundings to framework
 ```
 vi  framework/<framework_name>.yar
-/* please confer yara rule page  
+/* please read yara rule page  
  * https://yara.readthedocs.io/en/stable/writingrules.html
  */  
 
@@ -127,7 +127,7 @@ rule my_xss : <framework_name>
 }
 ```
 
-## Plugin : Participate with your own plugin 
+## Participate with your own plugin 
 please create plugin file 
 ```
 mkdir plugin/your_plugin
