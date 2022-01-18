@@ -4,7 +4,7 @@
 
 
 # TONBI
-<img src="https://user-images.githubusercontent.com/4240789/140497783-e7b4b21b-6272-4817-b495-5cc33d66b936.jpg" width=250>
+<img src="https://user-images.githubusercontent.com/4240789/140497783-e7b4b21b-6272-4817-b495-5cc33d66b936.jpg" width=200>
 
 ## What's TONBI?
 
