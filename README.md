@@ -26,7 +26,7 @@ TONBI is a source code auditing scanner against framework based web application.
 
 #### Viewes 
 
- Supporting | smarty, twig, blade, flexy, electron  
+ Supporting | smarty, twig, blade, flexy, electron, slim  
 -----------|---------
  Planning   | react   
  
