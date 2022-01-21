@@ -8,8 +8,28 @@
 
 ## What's TONBI?
 
+TONBI is a source code auditing scanner against framework based web application. It hunts for various vulnerabilites in such as Laravel, Codeigniter, Django, Flask, Rails , etc ... It's simple, easy, and intuitive! It gives the most efficient code auditing method especially for security researchers and also all the web application developers.  
 
-TONBI is a framework based web application source code auditing tool for security researchers. It supports various web application framework such as Laravel, Symfony, CakePHP, Codeigniter, ... It gives you an efficient auditing method for finding vulnerabilities of your web applications 
+#### Frameworks 
+
+ Supporting | laravel, codeigniter, django, flask,  gorilla, ethna, nodejs, rails  
+----------- | ------------
+ Planning   | symfony, fuelphp, cakePHP, silex, phalcon, express   
+
+
+#### Languages
+
+ Supporting | go, php, javascript, python, typescript, ruby 
+-----------|-----
+ Planning   | jsp, asp, java, .NET   
+
+
+#### Viewes 
+
+ Supporting | smarty, twig, blade, flexy, electron  
+-----------|---------
+ Planning   | react   
+ 
 
 
 ## Install 
@@ -32,7 +52,7 @@ Notice the --recursive option used with git. This is important because we need t
 ```
 $ python setup.py build --dynamic-linking
 ```
-## Basic Usage 
+## Usage 
 ```
 $python tonbi.py -d ./source_dir -f your_framework -l language 
 
@@ -66,7 +86,7 @@ Options:
     -D, --debug         debug mode output of dbg_print
 ```
 
-## Usage with configuration file 
+## Config File : Make your configuration file 
 create config.json like below
 
 ```
@@ -89,28 +109,9 @@ And run tonbi
 $python tonbi.py -c config.json 
 ```
 
-## Frameworks 
-
- Supporting | laravel, codeigniter, django, flask,  gorilla, ethna, nodejs, rails  
------------ | ------------
- Planning   | symfony, fuelphp, cakePHP, silex, phalcon, express   
 
 
-## Languages
-
- Supporting | go, php, javascript, python, typescript, ruby 
------------|-----
- Planning   | jsp, asp, java, .NET   
-
-
-## Viewes 
-
- Supporting | smarty, twig, blade, flexy, electron  
------------|---------
- Planning   | react   
-
-
-## Add your own foundings to framework
+## Rules : Add your own foundings to framework
 ```
 vi  framework/<framework_name>.yar
 /* please read yara rule page  
@@ -127,7 +128,7 @@ rule my_xss : <framework_name>
 }
 ```
 
-## Participate with your own plugin 
+## Plugins : Participate with your own plugin 
 please create plugin file 
 ```
 mkdir plugin/your_plugin
@@ -153,7 +154,7 @@ class MyPlugin :
         # please clear all resources when finished 
 ```
 
-## Test 
+## Run  
 ```
 ==============================================
 filename : ../targets/laravel/XXXX-Server/app/Libs/ImageMagic/Convert.php
