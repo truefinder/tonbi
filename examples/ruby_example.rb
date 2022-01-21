@@ -214,4 +214,37 @@ def bad_deserialization
     YAML.load(File.read("test.txt"))
  end
 
-
+ html = "<div>#{name}</div>".html_safe
+
+ content_tag :p, "Hello, #{name}"
+
+raw @user.name
+
+onfig.active_support.escape_html_entities_in_json = false
+
+ERB.new("<div>#{@user.name}</div>").result
+
+render inline: "<div>#{@user.name}</div>"
+
+
+render text: "<div>#{@user.name}</div>"
+
+<%= name.html_safe %>
+
+<%= content_tag :p, "Hello, #{name}" %>
+
+<%= raw @user.name =>
+
+<%== @user.name %>
+
+<div class=<%= classes %></div>
+
+<a href="<%= link %>"></a>
+
+<%= link_to "Here", @link %>
+
+
+<script>var name = <%= name %>;</script>
+
+
+

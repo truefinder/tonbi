@@ -293,11 +293,11 @@ def print_output():
 		with open(config.output, "a") as f : 
 			for  vul in Output.list :
 				f.write( vul) 
-			f.close()	
+			f.close()
+			print("The result successfully saved : " + config.output)
 	else:
 		for vul in Output.list :
 			print(vul) 
-			
 
 def import_path(path):
 	#module_name = os.path.basename(path).replace('-', '_')
@@ -439,7 +439,7 @@ def kbdb_audit( filename) :
 
 
 def yara_audit( filename) :
-	print("[%s][%s][%s] : " %(config.language, config.framework_name, config.view_name) + filename ) 
+	logger.debug("[%s][%s][%s] : " %(config.language, config.framework_name, config.view_name) + filename ) 
 	try: 
 		with open( filename, errors='replace' ) as f :
 			i = 0
@@ -492,15 +492,23 @@ def yara_audit( filename) :
 		print ("Could not read file:", filename)
 
 
+from tqdm import tqdm
+import time
 
 
 
 def walk_around(dirname):
-	for (path, dirs, files) in os.walk(dirname):
+	pbar = tqdm(os.walk(dirname))
+	for (path, dirs, files) in pbar:
+		
+		pbar.set_description("processing")
+		
+				
 		if (config.ignore_dirs):
 			dirs[:] = [d for d in dirs if d not in config.ignore_dirs]
 
-		for filename in files:
+		for filename in files:		
+
 			full_filename = os.path.join(path, filename) 
 			(base, ext ) = os.path.splitext( full_filename ) 
 			if(config.ignore_files):
@@ -514,6 +522,8 @@ def walk_around(dirname):
 				logger.debug('full filename : %s', full_filename) 
 				#kbdb_audit(full_filename)
 				yara_audit(full_filename)
+	pbar.close() 
+
 
 
 	
