@@ -91,14 +91,14 @@ $python tonbi.py -c config.json
 
 ## Frameworks 
 
- Supporting | laravel, codeigniter, django, flask,  gorilla, ethna, nodejs  
+ Supporting | laravel, codeigniter, django, flask,  gorilla, ethna, nodejs, rails  
 ----------- | ------------
- Planning   | symfony, fuelphp, cakePHP, silex, phalcon, rails, express   
+ Planning   | symfony, fuelphp, cakePHP, silex, phalcon, express   
 
 
 ## Languages
 
- Supporting | go, php, javascript, python, typescript 
+ Supporting | go, php, javascript, python, typescript, ruby 
 -----------|-----
  Planning   | jsp, asp, java, .NET   
 
