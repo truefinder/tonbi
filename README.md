@@ -54,7 +54,7 @@ $ python setup.py build --dynamic-linking
 ```
 ## Usage 
 ```
-$python tonbi.py -d ./source_dir -f your_framework -l language 
+$python tonbi.py -d SOURCE_DIR -f YOUR_FRAMEWORK -l YOUR_LANGUAGE -v YOUR_VIEW 
 
 ```
 
