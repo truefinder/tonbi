@@ -123,12 +123,12 @@ $python tonbi.py -c config.json
 ----------- | ------------
 source_directory (*)   | source code directory  
 framework_name (*) | framework  
-language (*) | wirtten language 
-view_name | output view template 
+language (*) | language 
+view_name | view template 
 head_count | it shows above lines (default :3)
 tail_count | it shows below lines (default :3) 
-output | result filename 
-plugins | plugin under /plugins 
+output | it prints result out into filename 
+plugins | it loads plugins under /plugin 
 ignore_files | it ignores files which are not related with source code
 ignore_dirs | it ignores directories which you don't want to scan  
 exclude | it exculdes vulnerabilities that you already knew   
