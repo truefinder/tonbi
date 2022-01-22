@@ -6,7 +6,7 @@
 # TONBI
 <img src="https://user-images.githubusercontent.com/4240789/140497783-e7b4b21b-6272-4817-b495-5cc33d66b936.jpg" width=200>
 
-## What's TONBI?
+## 1. What's TONBI?
 
 TONBI is a source code auditing scanner against framework based web application. It hunts for various vulnerabilites in such as Laravel, Codeigniter, Django, Flask, Rails , etc ... It's simple, easy, and intuitive! It gives the most efficient code auditing method especially for security researchers and also all the web application developers.  
 
@@ -32,7 +32,7 @@ TONBI is a source code auditing scanner against framework based web application.
  
 
 
-## Install 
+## 2. Install 
 Download tonbi from github 
 ```
 git clone http://github.com/truefinder/tonbi.git 
@@ -52,13 +52,14 @@ Notice the --recursive option used with git. This is important because we need t
 ```
 $ python setup.py build --dynamic-linking
 ```
-## Usage 
+
+## 3. Usage 
 ```
 $python tonbi.py -d SOURCE_DIR -f YOUR_FRAMEWORK -l YOUR_LANGUAGE -v YOUR_VIEW 
 
 ```
 
-## Options 
+#### Options 
 ```
 Usage: tonbi.py [options] args
 
@@ -86,8 +87,12 @@ Options:
     -D, --debug         debug mode output of dbg_print
 ```
 
-## Config File : Make your configuration file 
-create config.json like below
+## 4. Config File 
+
+
+#### Write your own configuration file 
+
+config.json looks like this 
 
 ```
 {
@@ -104,14 +109,39 @@ create config.json like below
 	"exclude" : ["ssl_misconfiguration"] 
 }
 ```
-And run tonbi
+
+
+#### Run tonbi with config file 
+
 ```
 $python tonbi.py -c config.json 
 ```
 
 
+#### Config Variables 
+ Name | Description
+----------- | ------------
+source_directory (*)   | source code directory  
+framework_name (*) | framework  
+language (*) | wirtten language 
+view_name | output view template 
+head_count | it shows above lines (default :3)
+tail_count | it shows below lines (default :3) 
+output | result filename 
+plugins | plugin under /plugins 
+ignore_files | it ignores files which are not related with source code
+ignore_dirs | it ignores directories which you don't want to scan  
+exclude | it exculdes vulnerabilities that you already knew   
 
-## Rules : Add your own foundings to framework
+**_(*) thies variables are essential in your config file_**
+
+
+
+
+
+## 5. Rules 
+#### How to add your own rules
+Add your own rules for your findings (for example : framework) 
 ```
 vi  framework/<framework_name>.yar
 /* please read yara rule page  
@@ -128,8 +158,9 @@ rule my_xss : <framework_name>
 }
 ```
 
-## Plugins : Participate with your own plugin 
-please create plugin file 
+## 6. Plugins
+#### How to write your own plugin 
+Please create plugin file under /plugin directory 
 ```
 mkdir plugin/your_plugin
 cat > plugin/your_plugin/your_plugin.py
@@ -154,7 +185,7 @@ class MyPlugin :
         # please clear all resources when finished 
 ```
 
-## Run  
+## 7.Result  
 ```
 ==============================================
 filename : ../targets/laravel/XXXX-Server/app/Libs/ImageMagic/Convert.php
