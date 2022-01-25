@@ -10,7 +10,7 @@ rule cmd_excute : ruby
 	$cmd2 = /(Process\.exec|Process\.spawn)/
 	$cmd3 = /(Open3\.capture2|Open3\.capture2e|Open3\.capture3|Open3\.popen2|Open3\.popen2e|Open3\.popen3)/
 	$cmd4 = /(IO\.popen|Gem::Util\.popen|PTY\.spaw)/
-	$cmd4 = /\.send\(/
+	$cmd5 = /\.send\(/
     condition:
         any of them 
 }
